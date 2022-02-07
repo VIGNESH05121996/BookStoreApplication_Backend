@@ -1,3 +1,5 @@
+using BusinessLayer.Interfaces;
+using BusinessLayer.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -8,6 +10,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Repository.ExceptionHandling;
+using RepositoryLayer.Interfaces;
+using RepositoryLayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +31,8 @@ namespace BookStoreApplication
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddTransient<IBookStoreUserBL, BookStoreUserBL>();
+            services.AddTransient<IBookStoreUserRL, BookStoreUserRL>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
