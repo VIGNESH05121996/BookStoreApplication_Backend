@@ -51,5 +51,21 @@ namespace BookStoreApplication.Controllers
             SignUpResponse user = userBL.UserSignup(model);
             return Ok(new { Success = true, message = "Registration Successfull ", user });
         }
+
+        /// <summary>
+        /// Logins the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        [HttpPost("login")]
+        public IActionResult Login(LoginModel model)
+        {
+            string credentials = userBL.Login(model);
+            if (credentials == null)
+            {
+                return NotFound(new { Success = false, message = "Email or Password Not Found" });
+            }
+            return Ok(new { Success = true, message = "Login Successful", jwtToken = credentials });
+        }
     }
 }

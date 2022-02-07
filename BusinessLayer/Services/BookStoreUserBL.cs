@@ -43,5 +43,15 @@ namespace BusinessLayer.Services
         {
             return this.userRL.UserSignup(model);
         }
+
+        /// <summary>
+        /// Logins the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        public string Login(LoginModel model)
+        {
+            return this.userRL.Login(model);
+        }
     }
 }
