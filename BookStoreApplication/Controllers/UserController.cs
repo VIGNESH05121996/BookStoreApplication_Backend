@@ -46,12 +46,19 @@ namespace BookStoreApplication.Controllers
         [HttpPost("signup")]
         public IActionResult UserSignup(SignUpModel model)
         {
-            if (model == null)
+            try
             {
-                return NotFound(new { Success = false, message = "Details Missing" });
+                if (model == null)
+                {
+                    return NotFound(new { Success = false, message = "Details Missing" });
+                }
+                SignUpResponse user = userBL.UserSignup(model);
+                return Ok(new { Success = true, message = "Registration Successfull ", user });
             }
-            SignUpResponse user = userBL.UserSignup(model);
-            return Ok(new { Success = true, message = "Registration Successfull ", user });
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
         }
 
         /// <summary>
@@ -62,12 +69,19 @@ namespace BookStoreApplication.Controllers
         [HttpPost("login")]
         public IActionResult Login(LoginModel model)
         {
-            string credentials = userBL.Login(model);
-            if (credentials == null)
+            try
             {
-                return NotFound(new { Success = false, message = "Email or Password Not Found" });
+                string credentials = userBL.Login(model);
+                if (credentials == null)
+                {
+                    return NotFound(new { Success = false, message = "Email or Password Not Found" });
+                }
+                return Ok(new { Success = true, message = "Login Successful", jwtToken = credentials });
             }
-            return Ok(new { Success = true, message = "Login Successful", jwtToken = credentials });
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
         }
 
         /// <summary>
@@ -78,25 +92,39 @@ namespace BookStoreApplication.Controllers
         [HttpPost("forgetPassword")]
         public IActionResult ForgetPassword(ForgetPasswordModel model)
         {
-            string forgetPassword = userBL.ForgetPassword(model);
-            if (forgetPassword == null)
+            try
             {
-                return NotFound(new { Success = false, message = "Email not in database" });
+                string forgetPassword = userBL.ForgetPassword(model);
+                if (forgetPassword == null)
+                {
+                    return NotFound(new { Success = false, message = "Email not in database" });
+                }
+                return Ok(new { Success = true, message = "Forget Password Mail Sent" });
             }
-            return Ok(new { Success = true, message = "Forget Password Mail Sent" });
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
         }
 
         [Authorize]
         [HttpPut("ResetPassword")]
         public IActionResult ResetPassword(ResetPasswordModel model)
         {
-            string email = User.FindFirst(ClaimTypes.Email).Value.ToString();
-            bool resetPassword = userBL.ResetPassword(model, email);
-            if (resetPassword)
+            try
             {
-                return Ok(new { Success = true, message = "Password Reset Successful" });
+                string email = User.FindFirst(ClaimTypes.Email).Value.ToString();
+                bool resetPassword = userBL.ResetPassword(model, email);
+                if (resetPassword)
+                {
+                    return Ok(new { Success = true, message = "Password Reset Successful" });
+                }
+                return NotFound(new { Success = false, message = "New Password not match with confirm password" });
             }
-            return NotFound(new { Success = false, message = "New Password not match with confirm password" });
+            catch (Exception ex)
+            {
+                return NotFound(new {message = ex.Message });
+            }
         }
     }
 }

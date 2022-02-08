@@ -71,6 +71,27 @@ namespace RepositoryLayer.Services
         }
 
         /// <summary>
+        /// Encrypteds the password.
+        /// </summary>
+        /// <param name="password">The password.</param>
+        /// <returns></returns>
+        /// <exception cref="Repository.ExceptionHandling.CustomException">Password missing for encryption</exception>
+        public static string EncryptedPassword(string password)
+        {
+            try
+            {
+                byte[] encptPass = new byte[password.Length];
+                encptPass = Encoding.UTF8.GetBytes(password);
+                string encrypted = Convert.ToBase64String(encptPass);
+                return encrypted;
+            }
+            catch (Exception ex)
+            {
+                throw new CustomException(HttpStatusCode.BadRequest, "Password missing for encryption");
+            }
+        }
+
+        /// <summary>
         /// Users the signup.
         /// </summary>
         /// <param name="model">The model.</param>
@@ -87,7 +108,7 @@ namespace RepositoryLayer.Services
 
                     command.Parameters.AddWithValue("@FullName", model.FullName);
                     command.Parameters.AddWithValue("@EmailID", model.EmailId);
-                    command.Parameters.AddWithValue("@Password", model.Password);
+                    command.Parameters.AddWithValue("@Password", EncryptedPassword(model.Password));
                     command.Parameters.AddWithValue("@MobileNumber", model.MobileNumber);
                     this.connection.Open();
                     int result = command.ExecuteNonQuery();
@@ -129,7 +150,7 @@ namespace RepositoryLayer.Services
 
                     this.connection.Open();
                     command.Parameters.AddWithValue("@EmailID", model.EmailId);
-                    command.Parameters.AddWithValue("@Password", model.Password);
+                    command.Parameters.AddWithValue("@Password", EncryptedPassword(model.Password));
 
                     SqlDataReader reader = command.ExecuteReader();
                     if (reader.HasRows)
@@ -148,7 +169,7 @@ namespace RepositoryLayer.Services
             }
             catch (Exception ex)
             {
-                throw new KeyNotFoundException(ex.Message);
+                throw new KeyNotFoundException("Cannot Validate details with database");
             }
             finally
             {
@@ -192,7 +213,7 @@ namespace RepositoryLayer.Services
             }
             catch (Exception ex)
             {
-                throw new KeyNotFoundException(ex.Message);
+                throw new KeyNotFoundException("Cannot Validate details with database");
             }
             finally
             {
@@ -219,7 +240,7 @@ namespace RepositoryLayer.Services
                         command.CommandType = CommandType.StoredProcedure;
 
                         command.Parameters.AddWithValue("@EmailID", email);
-                        command.Parameters.AddWithValue("@NewPassword", model.NewPassword);
+                        command.Parameters.AddWithValue("@NewPassword", EncryptedPassword(model.NewPassword));
                         this.connection.Open();
                         int result = command.ExecuteNonQuery();
                         this.connection.Close();
@@ -233,7 +254,7 @@ namespace RepositoryLayer.Services
             }
             catch (Exception ex)
             {
-                throw new KeyNotFoundException(ex.Message);
+                throw new KeyNotFoundException("Cannot Validate details with database");
             }
         }
     }

@@ -41,7 +41,14 @@ namespace BusinessLayer.Services
         /// <returns></returns>
         public SignUpResponse UserSignup(SignUpModel model)
         {
-            return this.userRL.UserSignup(model);
+            try
+            {
+                return this.userRL.UserSignup(model);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -51,7 +58,14 @@ namespace BusinessLayer.Services
         /// <returns></returns>
         public string Login(LoginModel model)
         {
-            return this.userRL.Login(model);
+            try
+            {
+                return this.userRL.Login(model);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -61,7 +75,14 @@ namespace BusinessLayer.Services
         /// <returns></returns>
         public string ForgetPassword(ForgetPasswordModel model)
         {
-            return this.userRL.ForgetPassword(model);
+            try
+            {
+                return this.userRL.ForgetPassword(model);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -72,7 +93,15 @@ namespace BusinessLayer.Services
         /// <returns></returns>
         public bool ResetPassword(ResetPasswordModel model, string email)
         {
-            return this.userRL.ResetPassword(model, email);
+            try
+            {
+                return this.userRL.ResetPassword(model, email);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
     }
 }
