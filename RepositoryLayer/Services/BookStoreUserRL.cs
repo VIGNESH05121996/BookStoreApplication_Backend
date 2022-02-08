@@ -199,5 +199,42 @@ namespace RepositoryLayer.Services
                 this.connection.Close();
             }
         }
+
+        /// <summary>
+        /// Resets the password.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="email">The email.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Collections.Generic.KeyNotFoundException"></exception>
+        public bool ResetPassword(ResetPasswordModel model, string email)
+        {
+            try
+            {
+                using (connection)
+                {
+                    if (model.NewPassword == model.ConfirmPassword)
+                    {
+                        SqlCommand command = new SqlCommand("spResetPassword", connection);
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        command.Parameters.AddWithValue("@EmailID", email);
+                        command.Parameters.AddWithValue("@NewPassword", model.NewPassword);
+                        this.connection.Open();
+                        int result = command.ExecuteNonQuery();
+                        this.connection.Close();
+                        if (result >= 0)
+                        {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new KeyNotFoundException(ex.Message);
+            }
+        }
     }
 }

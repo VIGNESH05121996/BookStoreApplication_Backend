@@ -7,11 +7,13 @@ namespace BookStoreApplication.Controllers
     using BusinessLayer.Interfaces;
     using Common.UserModel;
     using CommonLayer.UserModel;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Security.Claims;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -82,6 +84,19 @@ namespace BookStoreApplication.Controllers
                 return NotFound(new { Success = false, message = "Email not in database" });
             }
             return Ok(new { Success = true, message = "Forget Password Mail Sent" });
+        }
+
+        [Authorize]
+        [HttpPut("ResetPassword")]
+        public IActionResult ResetPassword(ResetPasswordModel model)
+        {
+            string email = User.FindFirst(ClaimTypes.Email).Value.ToString();
+            bool resetPassword = userBL.ResetPassword(model, email);
+            if (resetPassword)
+            {
+                return Ok(new { Success = true, message = "Password Reset Successful" });
+            }
+            return NotFound(new { Success = false, message = "New Password not match with confirm password" });
         }
     }
 }

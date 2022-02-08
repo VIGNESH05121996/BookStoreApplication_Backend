@@ -63,5 +63,16 @@ namespace BusinessLayer.Services
         {
             return this.userRL.ForgetPassword(model);
         }
+
+        /// <summary>
+        /// Resets the password.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="email">The email.</param>
+        /// <returns></returns>
+        public bool ResetPassword(ResetPasswordModel model, string email)
+        {
+            return this.userRL.ResetPassword(model, email);
+        }
     }
 }

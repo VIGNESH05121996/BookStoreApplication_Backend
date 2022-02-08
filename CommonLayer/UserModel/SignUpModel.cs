@@ -2,9 +2,6 @@
 //     SignUpModel copyright tag.
 // </copyright>
 
-/// <summary>
-/// Model for user signup
-/// </summary>
 namespace CommonLayer.UserModel
 {
     using System;

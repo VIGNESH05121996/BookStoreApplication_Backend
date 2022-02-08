@@ -37,5 +37,13 @@ namespace BusinessLayer.Interfaces
         /// <param name="model">The model.</param>
         /// <returns></returns>
         string ForgetPassword(ForgetPasswordModel model);
+
+        /// <summary>
+        /// Resets the password.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="email">The email.</param>
+        /// <returns></returns>
+        bool ResetPassword(ResetPasswordModel model, string email);
     }
 }
