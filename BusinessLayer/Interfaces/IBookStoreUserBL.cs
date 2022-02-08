@@ -30,5 +30,12 @@ namespace BusinessLayer.Interfaces
         /// <param name="model">The model.</param>
         /// <returns></returns>
         string Login(LoginModel model);
+
+        /// <summary>
+        /// Forgets the password.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        string ForgetPassword(ForgetPasswordModel model);
     }
 }

@@ -67,5 +67,21 @@ namespace BookStoreApplication.Controllers
             }
             return Ok(new { Success = true, message = "Login Successful", jwtToken = credentials });
         }
+
+        /// <summary>
+        /// Forget Password Api
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost("ForgetPassword")]
+        public IActionResult ForgetPassword(ForgetPasswordModel model)
+        {
+            string forgetPassword = userBL.ForgetPassword(model);
+            if (forgetPassword == null)
+            {
+                return NotFound(new { Success = false, message = "Email not in database" });
+            }
+            return Ok(new { Success = true, message = "Forget Password Mail Sent" });
+        }
     }
 }

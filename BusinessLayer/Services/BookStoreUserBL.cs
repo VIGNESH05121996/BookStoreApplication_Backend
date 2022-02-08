@@ -53,5 +53,15 @@ namespace BusinessLayer.Services
         {
             return this.userRL.Login(model);
         }
+
+        /// <summary>
+        /// Forgets the password.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        public string ForgetPassword(ForgetPasswordModel model)
+        {
+            return this.userRL.ForgetPassword(model);
+        }
     }
 }
