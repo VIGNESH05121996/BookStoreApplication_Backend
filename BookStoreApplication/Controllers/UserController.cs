@@ -73,7 +73,7 @@ namespace BookStoreApplication.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost("ForgetPassword")]
+        [HttpPost("forgetPassword")]
         public IActionResult ForgetPassword(ForgetPasswordModel model)
         {
             string forgetPassword = userBL.ForgetPassword(model);

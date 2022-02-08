@@ -45,7 +45,7 @@ namespace RepositoryLayer.Services
         /// <param name="userId">The user identifier.</param>
         /// <returns></returns>
         /// <exception cref="Repository.ExceptionHandling.CustomException">Cannot generate json web token since claims not added</exception>
-        public string JwtTokenGenerate(string email)
+        public string JwtTokenGenerate(string email,long userId)
         {
             try
             {
@@ -56,6 +56,7 @@ namespace RepositoryLayer.Services
                     Subject = new ClaimsIdentity(new Claim[]
                     {
                         new Claim(ClaimTypes.Email, email),
+                        new Claim("UserId",userId.ToString())
                     }),
                     Expires = DateTime.UtcNow.AddMinutes(15),
                     SigningCredentials = new SigningCredentials(loginTokenKey, SecurityAlgorithms.HmacSha256Signature)
@@ -123,8 +124,8 @@ namespace RepositoryLayer.Services
                 using (connection)
                 {
                     UserTableDetails detail = new UserTableDetails();
-                    string query = "select EmailId,Password from UserTable where EmailId=@EmailId and Password=@Password";
-                    SqlCommand command = new SqlCommand(query, connection);
+                    SqlCommand command = new SqlCommand("spLoginUser", connection);
+                    command.CommandType = CommandType.StoredProcedure;
 
                     this.connection.Open();
                     command.Parameters.AddWithValue("@EmailID", model.EmailId);
@@ -135,10 +136,11 @@ namespace RepositoryLayer.Services
                     {
                         while(reader.Read())
                         {
+                            detail.UserId = Convert.ToInt32(reader["UserId"] == DBNull.Value ? default : reader["UserId"]);
                             detail.EmailId = Convert.ToString(reader["EmailID"] == DBNull.Value ? default : reader["EmailID"]);
                             detail.Password = Convert.ToString(reader["Password"] == DBNull.Value ? default : reader["Password"]);
                         }
-                        string token = JwtTokenGenerate(detail.EmailId);
+                        string token = JwtTokenGenerate(detail.EmailId,detail.UserId);
                         return token;
                     }
                     return null;
@@ -167,8 +169,8 @@ namespace RepositoryLayer.Services
                 using (connection)
                 {
                     UserTableDetails detail = new UserTableDetails();
-                    string query = "select EmailId,Password from UserTable where EmailId=@EmailId";
-                    SqlCommand command = new SqlCommand(query, connection);
+                    SqlCommand command = new SqlCommand("spForgetPassword", connection);
+                    command.CommandType = CommandType.StoredProcedure;
 
                     this.connection.Open();
                     command.Parameters.AddWithValue("@EmailID", model.EmailId);
@@ -179,8 +181,9 @@ namespace RepositoryLayer.Services
                         while (reader.Read())
                         {
                             detail.EmailId = Convert.ToString(reader["EmailID"] == DBNull.Value ? default : reader["EmailID"]);
+                            detail.UserId = Convert.ToInt32(reader["UserId"] == DBNull.Value ? default : reader["UserId"]);
                         }
-                        string token = JwtTokenGenerate(detail.EmailId);
+                        string token = JwtTokenGenerate(detail.EmailId,detail.UserId);
                         new MsmqModel().MsmqSender(token);
                         return token;
                     }
