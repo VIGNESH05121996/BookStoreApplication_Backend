@@ -49,5 +49,24 @@ namespace Business.Services
                 throw;
             }
         }
+
+        /// <summary>
+        /// Updates the book details.
+        /// </summary>
+        /// <param name="bookId">The book identifier.</param>
+        /// <param name="model">The model.</param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public BookResponseModel UpdateBookDetails(long bookId, UpdateBookModel model, long jwtUserId)
+        {
+            try
+            {
+                return this.bookRL.UpdateBookDetails(bookId,model, jwtUserId);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }

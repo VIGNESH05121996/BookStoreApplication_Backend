@@ -17,5 +17,6 @@ namespace Repository.Interfaces
     public interface IBookStoreBookRL
     {
         BookResponseModel CreateBookDetails(CreateBookModel model,long jwtUserId);
+        BookResponseModel UpdateBookDetails(long bookId, UpdateBookModel model, long jwtUserId);
     }
 }

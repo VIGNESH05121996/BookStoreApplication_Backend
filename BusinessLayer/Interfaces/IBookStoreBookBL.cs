@@ -22,5 +22,14 @@ namespace Business.Interfaces
         /// <param name="model">The model.</param>
         /// <returns></returns>
         BookResponseModel CreateBookDetails(CreateBookModel model,long jwtUserId);
+
+        /// <summary>
+        /// Updates the book details.
+        /// </summary>
+        /// <param name="bookId">The book identifier.</param>
+        /// <param name="model">The model.</param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        BookResponseModel UpdateBookDetails(long bookId, UpdateBookModel model, long jwtUserId);
     }
 }
