@@ -13,7 +13,7 @@ namespace BusinessLayer.Interfaces
     using System.Threading.Tasks;
 
     /// <summary>
-    /// Interface for User Table
+    /// Book Store Business Layer Interface
     /// </summary>
     public interface IBookStoreUserBL
     {

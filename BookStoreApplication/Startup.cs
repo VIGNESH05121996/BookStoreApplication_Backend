@@ -1,3 +1,5 @@
+using Business.Interfaces;
+using Business.Services;
 using BusinessLayer.Interfaces;
 using BusinessLayer.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -12,6 +14,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Repository.ExceptionHandling;
+using Repository.Interfaces;
+using Repository.Services;
 using RepositoryLayer.Interfaces;
 using RepositoryLayer.Services;
 using System;
@@ -36,6 +40,8 @@ namespace BookStoreApplication
         {
             services.AddTransient<IBookStoreUserBL, BookStoreUserBL>();
             services.AddTransient<IBookStoreUserRL, BookStoreUserRL>();
+            services.AddTransient<IBookStoreBookBL, BookStoreBookBL>();
+            services.AddTransient<IBookStoreBookRL, BookStoreBookRL>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
