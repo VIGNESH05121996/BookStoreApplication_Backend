@@ -102,10 +102,36 @@ namespace BookStoreApplication.Controllers
                 BookResponseModel book = bookBL.RatingsUpdate(bookId, model, jwtUserId);
                 if (book == null)
                 {
-                    return NotFound(new { Success = false, message = "Invalid BookId to update" });
+                    return NotFound(new { Success = false, message = "Invalid BookId to update ratings" });
                 }
 
-                return Ok(new { Success = true, message = "Book Updated Successfully ", book });
+                return Ok(new { Success = true, message = "Book Ratings Updated Successfully ", book });
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Images the update.
+        /// </summary>
+        /// <param name="bookId">The book identifier.</param>
+        /// <param name="bookImage">The book image.</param>
+        /// <returns></returns>
+        [HttpPut("{bookId}/image")]
+        public IActionResult ImageUpdate(long bookId, IFormFile bookImage)
+        {
+            try
+            {
+                long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+                BookResponseModel book = bookBL.ImageUpdate(bookId, bookImage, jwtUserId);
+                if (book == null)
+                {
+                    return NotFound(new { Success = false, message = "Invalid BookId to update image" });
+                }
+
+                return Ok(new { Success = true, message = "BookImage Updated Successfully ", book });
             }
             catch (Exception ex)
             {

@@ -5,6 +5,7 @@
 namespace Repository.Interfaces
 {
     using Common.BookModel;
+    using Microsoft.AspNetCore.Http;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -41,5 +42,14 @@ namespace Repository.Interfaces
         /// <param name="jwtUserId">The JWT user identifier.</param>
         /// <returns></returns>
         BookResponseModel RatingsUpdate(long bookId, RatingsUpdateModel model, long jwtUserId);
+
+        /// <summary>
+        /// Images the update.
+        /// </summary>
+        /// <param name="bookId">The book identifier.</param>
+        /// <param name="image">The image.</param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        BookResponseModel ImageUpdate(long bookId, IFormFile bookImage, long jwtUserId);
     }
 }

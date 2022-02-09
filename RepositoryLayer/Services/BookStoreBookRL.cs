@@ -4,7 +4,11 @@
 
 namespace Repository.Services
 {
+    using CloudinaryDotNet;
+    using CloudinaryDotNet.Actions;
     using Common.BookModel;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.Extensions.Configuration;
     using Repository.ExceptionHandling;
     using Repository.Interfaces;
     using System;
@@ -21,6 +25,16 @@ namespace Repository.Services
     /// </summary>
     public class BookStoreBookRL : IBookStoreBookRL
     {
+        /// <summary>
+        /// The configuration
+        /// </summary>
+        private readonly IConfiguration config;
+
+        public BookStoreBookRL(IConfiguration config)
+        {
+            this.config = config;
+        }
+
         public static string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=BookStoreDataBase;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
         SqlConnection connection = new SqlConnection(connectionString);
@@ -217,6 +231,74 @@ namespace Repository.Services
             catch (Exception ex)
             {
                 throw new KeyNotFoundException("Cannot Add Detail To DataBase Since BookId Wrong");
+            }
+        }
+
+        /// <summary>
+        /// Images the update.
+        /// </summary>
+        /// <param name="bookId">The book identifier.</param>
+        /// <param name="bookImage"></param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Collections.Generic.KeyNotFoundException"></exception>
+        public BookResponseModel ImageUpdate(long bookId, IFormFile bookImage, long jwtUserId)
+        {
+            try
+            {
+                SqlConnection sqlConnection = new SqlConnection(connectionString);
+                string query = "select BookId,UserId from BookTable where BookId=@BookId and UserId=@UserId ";
+                SqlCommand validateCommand = new SqlCommand(query, sqlConnection);
+                BookValidationModel validationModel = new BookValidationModel();
+
+                sqlConnection.Open();
+                validateCommand.Parameters.AddWithValue("@BookId", bookId);
+                validateCommand.Parameters.AddWithValue("@UserId", jwtUserId);
+                SqlDataReader reader = validateCommand.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        validationModel.BookId = Convert.ToInt32(reader["BookId"] == DBNull.Value ? default : reader["BookId"]);
+                        validationModel.UserId = Convert.ToInt32(reader["UserId"] == DBNull.Value ? default : reader["UserId"]);
+                    }
+                    Account account = new Account(this.config["Cloudinary:CloudName"], this.config["Cloudinary:APIKey"], this.config["Cloudinary:APISecret"]);
+                    var imagePath = bookImage.OpenReadStream();
+                    Cloudinary cloudinary = new Cloudinary(account);
+                    ImageUploadParams imageParams = new ImageUploadParams()
+                    {
+                        File = new FileDescription(bookImage.FileName, imagePath)
+                    };
+                    string uploadImage = cloudinary.Upload(imageParams).Url.ToString();
+                    using (connection)
+                    {
+                        SqlCommand command = new SqlCommand("spBookImageUpdate", connection);
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        command.Parameters.AddWithValue("@BookId", validationModel.BookId);
+                        command.Parameters.AddWithValue("@BookImage", uploadImage);
+                        command.Parameters.AddWithValue("@UserId", validationModel.UserId);
+                        this.connection.Open();
+                        int result = command.ExecuteNonQuery();
+                        this.connection.Close();
+                        if (result >= 0)
+                        {
+                            BookResponseModel response = new()
+                            {
+                                BookId = bookId,
+                                BookImage = uploadImage,
+                                UserId = jwtUserId
+                            };
+                            return response;
+                        }
+                    }
+                }
+                sqlConnection.Close();
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new KeyNotFoundException(ex.Message);
             }
         }
     }

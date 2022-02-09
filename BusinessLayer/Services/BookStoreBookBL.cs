@@ -6,6 +6,7 @@ namespace Business.Services
 {
     using Business.Interfaces;
     using Common.BookModel;
+    using Microsoft.AspNetCore.Http;
     using Repository.Interfaces;
     using System;
     using System.Collections.Generic;
@@ -81,6 +82,25 @@ namespace Business.Services
             try
             {
                 return this.bookRL.RatingsUpdate(bookId, model, jwtUserId);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Images the update.
+        /// </summary>
+        /// <param name="bookId">The book identifier.</param>
+        /// <param name="bookImage"></param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public BookResponseModel ImageUpdate(long bookId, IFormFile bookImage, long jwtUserId)
+        {
+            try
+            {
+                return this.bookRL.ImageUpdate(bookId, bookImage, jwtUserId);
             }
             catch (Exception ex)
             {
