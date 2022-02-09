@@ -49,52 +49,36 @@ namespace Repository.Services
         {
             try
             {
-                SqlConnection sqlConnection = new SqlConnection(connectionString);
-                string query = "select UserId from UserTable where UserId=@UserId ";
-                SqlCommand validateCommand = new SqlCommand(query, sqlConnection);
-                BookValidationModel validationModel = new BookValidationModel();
-
-                sqlConnection.Open();
-                validateCommand.Parameters.AddWithValue("@UserId", jwtUserId);
-                SqlDataReader reader = validateCommand.ExecuteReader();
-                if (reader.HasRows)
+                using (connection)
                 {
-                    while (reader.Read())
-                    {
-                        validationModel.UserId = Convert.ToInt32(reader["UserId"] == DBNull.Value ? default : reader["UserId"]);
-                    }
-                    using (connection)
-                    {
-                        SqlCommand command = new SqlCommand("spCreateBook", connection);
-                        command.CommandType = CommandType.StoredProcedure;
+                    SqlCommand command = new("spCreateBook", connection);
+                    command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@BookName", model.BookName);
-                        command.Parameters.AddWithValue("@BookAuthor", model.BookAuthor);
-                        command.Parameters.AddWithValue("@OriginalPrice", model.OriginalPrice);
-                        command.Parameters.AddWithValue("@DiscountPrice", model.DiscountPrice);
-                        command.Parameters.AddWithValue("@BookQuantity", model.BookQuantity);
-                        command.Parameters.AddWithValue("@BookDetails", model.BookDetails);
-                        command.Parameters.AddWithValue("@UserId", jwtUserId);
-                        this.connection.Open();
-                        int result = command.ExecuteNonQuery();
-                        this.connection.Close();
-                        if (result >= 0)
+                    command.Parameters.AddWithValue("@BookName", model.BookName);
+                    command.Parameters.AddWithValue("@BookAuthor", model.BookAuthor);
+                    command.Parameters.AddWithValue("@OriginalPrice", model.OriginalPrice);
+                    command.Parameters.AddWithValue("@DiscountPrice", model.DiscountPrice);
+                    command.Parameters.AddWithValue("@BookQuantity", model.BookQuantity);
+                    command.Parameters.AddWithValue("@BookDetails", model.BookDetails);
+                    command.Parameters.AddWithValue("@UserId", jwtUserId);
+                    this.connection.Open();
+                    int result = command.ExecuteNonQuery();
+                    this.connection.Close();
+                    if (result >= 0)
+                    {
+                        BookResponseModel response = new()
                         {
-                            BookResponseModel response = new()
-                            {
-                                BookName = model.BookName,
-                                BookAuthor = model.BookAuthor,
-                                OriginalPrice = model.OriginalPrice,
-                                DiscountPrice = model.DiscountPrice,
-                                BookQuantity = model.BookQuantity,
-                                BookDetails = model.BookDetails,
-                                UserId = validationModel.UserId
-                            };
-                            return response;
-                        }
+                            BookName = model.BookName,
+                            BookAuthor = model.BookAuthor,
+                            OriginalPrice = model.OriginalPrice,
+                            DiscountPrice = model.DiscountPrice,
+                            BookQuantity = model.BookQuantity,
+                            BookDetails = model.BookDetails,
+                            UserId = jwtUserId
+                        };
+                        return response;
                     }
                 }
-                sqlConnection.Close();
                 return null;
             }
             catch (Exception ex)
@@ -114,56 +98,38 @@ namespace Repository.Services
         {
             try
             {
-                SqlConnection sqlConnection = new SqlConnection(connectionString);
-                string query = "select BookId,UserId from BookTable where BookId=@BookId and UserId=@UserId ";
-                SqlCommand validateCommand = new SqlCommand(query, sqlConnection);
-                BookValidationModel validationModel = new BookValidationModel();
-
-                sqlConnection.Open();
-                validateCommand.Parameters.AddWithValue("@BookId", bookId);
-                validateCommand.Parameters.AddWithValue("@UserId", jwtUserId);
-                SqlDataReader reader = validateCommand.ExecuteReader();
-                if (reader.HasRows)
+                using (connection)
                 {
-                    while (reader.Read())
-                    {
-                        validationModel.BookId = Convert.ToInt32(reader["BookId"] == DBNull.Value ? default : reader["BookId"]);
-                        validationModel.UserId = Convert.ToInt32(reader["UserId"] == DBNull.Value ? default : reader["UserId"]);
-                    }
-                    using (connection)
-                    {
-                        SqlCommand command = new SqlCommand("spUpdateBook", connection);
-                        command.CommandType = CommandType.StoredProcedure;
+                    SqlCommand command = new("spUpdateBook", connection);
+                    command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@BookId", validationModel.BookId);
-                        command.Parameters.AddWithValue("@BookName", model.BookName);
-                        command.Parameters.AddWithValue("@BookAuthor", model.BookAuthor);
-                        command.Parameters.AddWithValue("@OriginalPrice", model.OriginalPrice);
-                        command.Parameters.AddWithValue("@DiscountPrice", model.DiscountPrice);
-                        command.Parameters.AddWithValue("@BookQuantity", model.BookQuantity);
-                        command.Parameters.AddWithValue("@BookDetails", model.BookDetails);
-                        command.Parameters.AddWithValue("@UserId", validationModel.UserId);
-                        this.connection.Open();
-                        int result = command.ExecuteNonQuery();
-                        this.connection.Close();
-                        if (result >= 0)
+                    command.Parameters.AddWithValue("@BookId", bookId);
+                    command.Parameters.AddWithValue("@BookName", model.BookName);
+                    command.Parameters.AddWithValue("@BookAuthor", model.BookAuthor);
+                    command.Parameters.AddWithValue("@OriginalPrice", model.OriginalPrice);
+                    command.Parameters.AddWithValue("@DiscountPrice", model.DiscountPrice);
+                    command.Parameters.AddWithValue("@BookQuantity", model.BookQuantity);
+                    command.Parameters.AddWithValue("@BookDetails", model.BookDetails);
+                    command.Parameters.AddWithValue("@UserId", jwtUserId);
+                    this.connection.Open();
+                    int result = command.ExecuteNonQuery();
+                    this.connection.Close();
+                    if (result >= 0)
+                    {
+                        BookResponseModel response = new()
                         {
-                            BookResponseModel response = new()
-                            {
-                                BookId = bookId,
-                                BookName = model.BookName,
-                                BookAuthor = model.BookAuthor,
-                                OriginalPrice = model.OriginalPrice,
-                                DiscountPrice = model.DiscountPrice,
-                                BookQuantity = model.BookQuantity,
-                                BookDetails = model.BookDetails,
-                                UserId = jwtUserId
-                            };
-                            return response;
-                        }
+                            BookId = bookId,
+                            BookName = model.BookName,
+                            BookAuthor = model.BookAuthor,
+                            OriginalPrice = model.OriginalPrice,
+                            DiscountPrice = model.DiscountPrice,
+                            BookQuantity = model.BookQuantity,
+                            BookDetails = model.BookDetails,
+                            UserId = jwtUserId
+                        };
+                        return response;
                     }
                 }
-                sqlConnection.Close();
                 return null;
             }
             catch (Exception ex)
@@ -184,48 +150,30 @@ namespace Repository.Services
         {
             try
             {
-                SqlConnection sqlConnection = new SqlConnection(connectionString);
-                string query = "select BookId,UserId from BookTable where BookId=@BookId and UserId=@UserId ";
-                SqlCommand validateCommand = new SqlCommand(query, sqlConnection);
-                BookValidationModel validationModel = new BookValidationModel();
-
-                sqlConnection.Open();
-                validateCommand.Parameters.AddWithValue("@BookId", bookId);
-                validateCommand.Parameters.AddWithValue("@UserId", jwtUserId);
-                SqlDataReader reader = validateCommand.ExecuteReader();
-                if (reader.HasRows)
+                using (connection)
                 {
-                    while (reader.Read())
-                    {
-                        validationModel.BookId = Convert.ToInt32(reader["BookId"] == DBNull.Value ? default : reader["BookId"]);
-                        validationModel.UserId = Convert.ToInt32(reader["UserId"] == DBNull.Value ? default : reader["UserId"]);
-                    }
-                    using (connection)
-                    {
-                        SqlCommand command = new SqlCommand("spRatingsUpdate", connection);
-                        command.CommandType = CommandType.StoredProcedure;
+                    SqlCommand command = new("spRatingsUpdate", connection);
+                    command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@BookId", validationModel.BookId);
-                        command.Parameters.AddWithValue("@TotalRating", model.TotalRating);
-                        command.Parameters.AddWithValue("@NoOfPeopleRated", model.NoOfPeopleRated);
-                        command.Parameters.AddWithValue("@UserId", validationModel.UserId);
-                        this.connection.Open();
-                        int result = command.ExecuteNonQuery();
-                        this.connection.Close();
-                        if (result >= 0)
+                    command.Parameters.AddWithValue("@BookId", bookId);
+                    command.Parameters.AddWithValue("@TotalRating", model.TotalRating);
+                    command.Parameters.AddWithValue("@NoOfPeopleRated", model.NoOfPeopleRated);
+                    command.Parameters.AddWithValue("@UserId", jwtUserId);
+                    this.connection.Open();
+                    int result = command.ExecuteNonQuery();
+                    this.connection.Close();
+                    if (result >= 0)
+                    {
+                        BookResponseModel response = new()
                         {
-                            BookResponseModel response = new()
-                            {
-                                BookId = bookId,
-                                TotalRating = model.TotalRating,
-                                NoOfPeopleRated = model.NoOfPeopleRated,
-                                UserId = jwtUserId
-                            };
-                            return response;
-                        }
+                            BookId = bookId,
+                            TotalRating = model.TotalRating,
+                            NoOfPeopleRated = model.NoOfPeopleRated,
+                            UserId = jwtUserId
+                        };
+                        return response;
                     }
                 }
-                sqlConnection.Close();
                 return null;
             }
             catch (Exception ex)
@@ -246,54 +194,36 @@ namespace Repository.Services
         {
             try
             {
-                SqlConnection sqlConnection = new SqlConnection(connectionString);
-                string query = "select BookId,UserId from BookTable where BookId=@BookId and UserId=@UserId ";
-                SqlCommand validateCommand = new SqlCommand(query, sqlConnection);
-                BookValidationModel validationModel = new BookValidationModel();
-
-                sqlConnection.Open();
-                validateCommand.Parameters.AddWithValue("@BookId", bookId);
-                validateCommand.Parameters.AddWithValue("@UserId", jwtUserId);
-                SqlDataReader reader = validateCommand.ExecuteReader();
-                if (reader.HasRows)
+                Account account = new Account(this.config["Cloudinary:CloudName"], this.config["Cloudinary:APIKey"], this.config["Cloudinary:APISecret"]);
+                var imagePath = bookImage.OpenReadStream();
+                Cloudinary cloudinary = new Cloudinary(account);
+                ImageUploadParams imageParams = new ImageUploadParams()
                 {
-                    while (reader.Read())
-                    {
-                        validationModel.BookId = Convert.ToInt32(reader["BookId"] == DBNull.Value ? default : reader["BookId"]);
-                        validationModel.UserId = Convert.ToInt32(reader["UserId"] == DBNull.Value ? default : reader["UserId"]);
-                    }
-                    Account account = new Account(this.config["Cloudinary:CloudName"], this.config["Cloudinary:APIKey"], this.config["Cloudinary:APISecret"]);
-                    var imagePath = bookImage.OpenReadStream();
-                    Cloudinary cloudinary = new Cloudinary(account);
-                    ImageUploadParams imageParams = new ImageUploadParams()
-                    {
-                        File = new FileDescription(bookImage.FileName, imagePath)
-                    };
-                    string uploadImage = cloudinary.Upload(imageParams).Url.ToString();
-                    using (connection)
-                    {
-                        SqlCommand command = new SqlCommand("spBookImageUpdate", connection);
-                        command.CommandType = CommandType.StoredProcedure;
+                    File = new FileDescription(bookImage.FileName, imagePath)
+                };
+                string uploadImage = cloudinary.Upload(imageParams).Url.ToString();
+                using (connection)
+                {
+                    SqlCommand command = new SqlCommand("spBookImageUpdate", connection);
+                    command.CommandType = CommandType.StoredProcedure;
 
-                        command.Parameters.AddWithValue("@BookId", validationModel.BookId);
-                        command.Parameters.AddWithValue("@BookImage", uploadImage);
-                        command.Parameters.AddWithValue("@UserId", validationModel.UserId);
-                        this.connection.Open();
-                        int result = command.ExecuteNonQuery();
-                        this.connection.Close();
-                        if (result >= 0)
+                    command.Parameters.AddWithValue("@BookId", bookId);
+                    command.Parameters.AddWithValue("@BookImage", uploadImage);
+                    command.Parameters.AddWithValue("@UserId", jwtUserId);
+                    this.connection.Open();
+                    int result = command.ExecuteNonQuery();
+                    this.connection.Close();
+                    if (result >= 0)
+                    {
+                        BookResponseModel response = new()
                         {
-                            BookResponseModel response = new()
-                            {
-                                BookId = bookId,
-                                BookImage = uploadImage,
-                                UserId = jwtUserId
-                            };
-                            return response;
-                        }
+                            BookId = bookId,
+                            BookImage = uploadImage,
+                            UserId = jwtUserId
+                        };
+                        return response;
                     }
                 }
-                sqlConnection.Close();
                 return null;
             }
             catch (Exception ex)
