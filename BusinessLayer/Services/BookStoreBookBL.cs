@@ -68,5 +68,24 @@ namespace Business.Services
                 throw;
             }
         }
+
+        /// <summary>
+        /// Ratingses the update.
+        /// </summary>
+        /// <param name="bookId">The book identifier.</param>
+        /// <param name="model">The model.</param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public BookResponseModel RatingsUpdate(long bookId, RatingsUpdateModel model, long jwtUserId)
+        {
+            try
+            {
+                return this.bookRL.RatingsUpdate(bookId, model, jwtUserId);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }

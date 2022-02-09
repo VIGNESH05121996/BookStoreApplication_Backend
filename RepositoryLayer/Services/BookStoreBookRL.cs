@@ -157,5 +157,67 @@ namespace Repository.Services
                 throw new KeyNotFoundException("Cannot Add Detail To DataBase Since BookId Wrong");
             }
         }
+
+        /// <summary>
+        /// Ratingses the update.
+        /// </summary>
+        /// <param name="bookId">The book identifier.</param>
+        /// <param name="model">The model.</param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Collections.Generic.KeyNotFoundException">Cannot Add Detail To DataBase Since BookId Wrong</exception>
+        public BookResponseModel RatingsUpdate(long bookId, RatingsUpdateModel model, long jwtUserId)
+        {
+            try
+            {
+                SqlConnection sqlConnection = new SqlConnection(connectionString);
+                string query = "select BookId,UserId from BookTable where BookId=@BookId and UserId=@UserId ";
+                SqlCommand validateCommand = new SqlCommand(query, sqlConnection);
+                BookValidationModel validationModel = new BookValidationModel();
+
+                sqlConnection.Open();
+                validateCommand.Parameters.AddWithValue("@BookId", bookId);
+                validateCommand.Parameters.AddWithValue("@UserId", jwtUserId);
+                SqlDataReader reader = validateCommand.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        validationModel.BookId = Convert.ToInt32(reader["BookId"] == DBNull.Value ? default : reader["BookId"]);
+                        validationModel.UserId = Convert.ToInt32(reader["UserId"] == DBNull.Value ? default : reader["UserId"]);
+                    }
+                    using (connection)
+                    {
+                        SqlCommand command = new SqlCommand("spRatingsUpdate", connection);
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        command.Parameters.AddWithValue("@BookId", validationModel.BookId);
+                        command.Parameters.AddWithValue("@TotalRating", model.TotalRating);
+                        command.Parameters.AddWithValue("@NoOfPeopleRated", model.NoOfPeopleRated);
+                        command.Parameters.AddWithValue("@UserId", validationModel.UserId);
+                        this.connection.Open();
+                        int result = command.ExecuteNonQuery();
+                        this.connection.Close();
+                        if (result >= 0)
+                        {
+                            BookResponseModel response = new()
+                            {
+                                BookId = bookId,
+                                TotalRating = model.TotalRating,
+                                NoOfPeopleRated = model.NoOfPeopleRated,
+                                UserId = jwtUserId
+                            };
+                            return response;
+                        }
+                    }
+                }
+                sqlConnection.Close();
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new KeyNotFoundException("Cannot Add Detail To DataBase Since BookId Wrong");
+            }
+        }
     }
 }
