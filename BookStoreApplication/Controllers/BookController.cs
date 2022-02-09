@@ -42,7 +42,7 @@ namespace BookStoreApplication.Controllers
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        [HttpPost("Book")]
+        [HttpPost]
         public IActionResult CreateBookDetails(CreateBookModel model)
         {
             try
@@ -61,19 +61,44 @@ namespace BookStoreApplication.Controllers
             }
         }
 
+        [HttpGet]
+        public IActionResult GetAllBook()
+        {
+            try
+            {
+                long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+                IEnumerable<BookResponseModel> book = bookBL.GetAllBook(jwtUserId);
+                if (book == null)
+                {
+                    return NotFound(new { Success = false, message = "Invalid BookId" });
+                }
+
+                return Ok(new { Success = true, message = "Retrived All Book ", book });
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Gets the book with book identifier.
+        /// </summary>
+        /// <param name="bookId">The book identifier.</param>
+        /// <returns></returns>
         [HttpGet("{bookId}")]
         public IActionResult GetBookWithBookId(long bookId)
         {
             try
             {
                 long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
-                BookResponseModel book = bookBL.GetBookWithBookId(bookId, jwtUserId);
-                if (book == null)
+                BookResponseModel allBooks = bookBL.GetBookWithBookId(bookId, jwtUserId);
+                if (allBooks == null)
                 {
                     return NotFound(new { Success = false, message = "Invalid BookId" });
                 }
 
-                return Ok(new { Success = true, message = "Retrived Book BooId ", book });
+                return Ok(new { Success = true, message = "Retrived Book BookId ", allBooks });
             }
             catch (Exception ex)
             {

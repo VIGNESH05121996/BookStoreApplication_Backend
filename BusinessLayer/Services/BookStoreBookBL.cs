@@ -52,6 +52,23 @@ namespace Business.Services
         }
 
         /// <summary>
+        /// Gets all book.
+        /// </summary>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public IEnumerable<BookResponseModel> GetAllBook(long jwtUserId)
+        {
+            try
+            {
+                return this.bookRL.GetAllBook(jwtUserId);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
         /// Gets the book with book identifier.
         /// </summary>
         /// <param name="bookId">The book identifier.</param>

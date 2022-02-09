@@ -58,5 +58,12 @@ namespace Business.Interfaces
         /// <param name="jwtUserId">The JWT user identifier.</param>
         /// <returns></returns>
         BookResponseModel GetBookWithBookId(long bookId, long jwtUserId);
+
+        /// <summary>
+        /// Gets all book.
+        /// </summary>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        IEnumerable<BookResponseModel> GetAllBook(long jwtUserId);
     }
 }

@@ -88,6 +88,56 @@ namespace Repository.Services
         }
 
         /// <summary>
+        /// Gets all book.
+        /// </summary>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Collections.Generic.KeyNotFoundException">Invalid user to fetch details</exception>
+        public IEnumerable<BookResponseModel> GetAllBook(long jwtUserId)
+        {
+            try
+            {
+                List<BookResponseModel> responseModel = new();
+                SqlCommand command = new("spGetAllBooks", connection);
+                command.CommandType = CommandType.StoredProcedure;
+
+                this.connection.Open();
+                command.Parameters.AddWithValue("@UserId", jwtUserId);
+                SqlDataAdapter dataAdapter = new(command);
+                DataTable dataTable = new();
+                dataAdapter.Fill(dataTable);
+                foreach (DataRow dataRow in dataTable.Rows)
+                {
+                    responseModel.Add(
+                         new BookResponseModel
+                         {
+                             BookId = Convert.ToInt32(dataRow["BookId"]),
+                             BookName = Convert.ToString(dataRow["BookName"]),
+                             BookAuthor = Convert.ToString(dataRow["BookAuthor"]),
+                             TotalRating = Convert.ToInt32(dataRow["TotalRating"]),
+                             NoOfPeopleRated = Convert.ToInt32(dataRow["NoOfPeopleRated"]),
+                             OriginalPrice = Convert.ToInt32(dataRow["OriginalPrice"]),
+                             DiscountPrice = Convert.ToInt32(dataRow["DiscountPrice"]),
+                             BookImage = Convert.ToString(dataRow["BookImage"]),
+                             BookQuantity = Convert.ToInt32(dataRow["BookQuantity"]),
+                             BookDetails = Convert.ToString(dataRow["BookDetails"]),
+                             UserId = Convert.ToInt32(dataRow["UserId"]),
+                         }
+                     );
+                }
+                return responseModel;
+            }
+            catch (Exception ex)
+            {
+                throw new KeyNotFoundException("Invalid user to fetch details");
+            }
+            finally
+            {
+                this.connection.Close();
+            }
+        }
+
+        /// <summary>
         /// Gets the book with book identifier.
         /// </summary>
         /// <param name="bookId">The book identifier.</param>
@@ -95,66 +145,88 @@ namespace Repository.Services
         /// <returns></returns>
         public BookResponseModel GetBookWithBookId(long bookId, long jwtUserId)
         {
-            BookResponseModel responseModel = new();
-            SqlCommand command = new("spGetBookWithBookId", connection);
-            command.CommandType = CommandType.StoredProcedure;
-
-            this.connection.Open();
-            command.Parameters.AddWithValue("@BookId", bookId);
-            command.Parameters.AddWithValue("@UserId", jwtUserId);
-            SqlDataReader reader = command.ExecuteReader();
-
-            if(reader.HasRows)
+            try
             {
-                while (reader.Read())
+                BookResponseModel responseModel = new();
+                SqlCommand command = new("spGetBookWithBookId", connection);
+                command.CommandType = CommandType.StoredProcedure;
+
+                this.connection.Open();
+                command.Parameters.AddWithValue("@BookId", bookId);
+                command.Parameters.AddWithValue("@UserId", jwtUserId);
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
                 {
-                    responseModel.BookId = Convert.ToInt32(reader["BookId"]);
-                    responseModel.BookName = reader["BookName"].ToString();
-                    responseModel.BookAuthor = reader["BookAuthor"].ToString();
-                    responseModel.TotalRating = Convert.ToInt32(reader["TotalRating"]);
-                    responseModel.NoOfPeopleRated = Convert.ToInt32(reader["NoOfPeopleRated"]);
-                    responseModel.OriginalPrice = Convert.ToInt32(reader["OriginalPrice"]);
-                    responseModel.DiscountPrice = Convert.ToInt32(reader["DiscountPrice"]);
-                    responseModel.BookImage = reader["BookImage"].ToString();
-                    responseModel.BookQuantity = Convert.ToInt32(reader["BookQuantity"]);
-                    responseModel.BookDetails = reader["BookImage"].ToString();
-                    responseModel.UserId = Convert.ToInt32(reader["UserId"]);
+                    while (reader.Read())
+                    {
+                        responseModel.BookId = Convert.ToInt32(reader["BookId"]);
+                        responseModel.BookName = reader["BookName"].ToString();
+                        responseModel.BookAuthor = reader["BookAuthor"].ToString();
+                        responseModel.TotalRating = Convert.ToInt32(reader["TotalRating"]);
+                        responseModel.NoOfPeopleRated = Convert.ToInt32(reader["NoOfPeopleRated"]);
+                        responseModel.OriginalPrice = Convert.ToInt32(reader["OriginalPrice"]);
+                        responseModel.DiscountPrice = Convert.ToInt32(reader["DiscountPrice"]);
+                        responseModel.BookImage = reader["BookImage"].ToString();
+                        responseModel.BookQuantity = Convert.ToInt32(reader["BookQuantity"]);
+                        responseModel.BookDetails = reader["BookDetails"].ToString();
+                        responseModel.UserId = Convert.ToInt32(reader["UserId"]);
+                    }
+                    return responseModel;
                 }
-                return responseModel;
+                return null;
             }
-            return null;
+            catch (Exception ex)
+            {
+                throw new KeyNotFoundException("Cannot fetch details because bookId is wrong");
+            }
+            finally
+            {
+                this.connection.Close();
+            }
         }
 
         public BookResponseModel GetWithBookId(long bookId,long jwtUserId)
         {
-            BookResponseModel responseModel = new();
-            SqlCommand command = new("spGetBookWithBookId", connection);
-            command.CommandType = CommandType.StoredProcedure;
-
-            this.connection.Open();
-            command.Parameters.AddWithValue("@BookId", bookId);
-            command.Parameters.AddWithValue("@UserId", jwtUserId);
-            SqlDataReader reader = command.ExecuteReader();
-
-            if (reader.HasRows)
+            try
             {
-                while (reader.Read())
+                BookResponseModel responseModel = new();
+                SqlCommand command = new("spGetBookWithBookId", connection);
+                command.CommandType = CommandType.StoredProcedure;
+
+                this.connection.Open();
+                command.Parameters.AddWithValue("@BookId", bookId);
+                command.Parameters.AddWithValue("@UserId", jwtUserId);
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
                 {
-                    responseModel.BookId = Convert.ToInt32(reader["BookId"]);
-                    responseModel.BookName = reader["BookName"].ToString();
-                    responseModel.BookAuthor = reader["BookAuthor"].ToString();
-                    responseModel.TotalRating = Convert.ToInt32(reader["TotalRating"]);
-                    responseModel.NoOfPeopleRated = Convert.ToInt32(reader["NoOfPeopleRated"]);
-                    responseModel.OriginalPrice = Convert.ToInt32(reader["OriginalPrice"]);
-                    responseModel.DiscountPrice = Convert.ToInt32(reader["DiscountPrice"]);
-                    responseModel.BookImage = reader["BookImage"].ToString();
-                    responseModel.BookQuantity = Convert.ToInt32(reader["BookQuantity"]);
-                    responseModel.BookDetails = reader["BookImage"].ToString();
-                    responseModel.UserId = Convert.ToInt32(reader["UserId"]);
+                    while (reader.Read())
+                    {
+                        responseModel.BookId = Convert.ToInt32(reader["BookId"]);
+                        responseModel.BookName = reader["BookName"].ToString();
+                        responseModel.BookAuthor = reader["BookAuthor"].ToString();
+                        responseModel.TotalRating = Convert.ToInt32(reader["TotalRating"]);
+                        responseModel.NoOfPeopleRated = Convert.ToInt32(reader["NoOfPeopleRated"]);
+                        responseModel.OriginalPrice = Convert.ToInt32(reader["OriginalPrice"]);
+                        responseModel.DiscountPrice = Convert.ToInt32(reader["DiscountPrice"]);
+                        responseModel.BookImage = reader["BookImage"].ToString();
+                        responseModel.BookQuantity = Convert.ToInt32(reader["BookQuantity"]);
+                        responseModel.BookDetails = reader["BookDetails"].ToString();
+                        responseModel.UserId = Convert.ToInt32(reader["UserId"]);
+                    }
+                    return responseModel;
                 }
-                return responseModel;
+                return null;
             }
-            return null;
+            catch (Exception ex)
+            {
+                throw new KeyNotFoundException("Cannot fetch details because bookId is wrong");
+            }
+            finally
+            {
+                this.connection.Close();
+            }
         }
 
         /// <summary>
@@ -193,7 +265,7 @@ namespace Repository.Services
             }
             catch (Exception ex)
             {
-                throw new KeyNotFoundException("Cannot Add Detail To DataBase Since BookId Wrong");
+                throw new KeyNotFoundException("Cannot update detail since bookId is wrong");
             }
         }
 
@@ -230,7 +302,7 @@ namespace Repository.Services
             }
             catch (Exception ex)
             {
-                throw new KeyNotFoundException("Cannot Add Detail To DataBase Since BookId Wrong");
+                throw new KeyNotFoundException("Cannot update detail since bookId is wrong");
             }
         }
 
@@ -274,7 +346,7 @@ namespace Repository.Services
             }
             catch (Exception ex)
             {
-                throw new KeyNotFoundException(ex.Message);
+                throw new KeyNotFoundException("Cannot Update image because bookId is wrong");
             }
         }
     }

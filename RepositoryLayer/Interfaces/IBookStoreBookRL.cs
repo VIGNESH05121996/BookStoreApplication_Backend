@@ -44,6 +44,13 @@ namespace Repository.Interfaces
         BookResponseModel RatingsUpdate(long bookId, RatingsUpdateModel model, long jwtUserId);
 
         /// <summary>
+        /// Gets all book.
+        /// </summary>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        IEnumerable<BookResponseModel> GetAllBook(long jwtUserId);
+
+        /// <summary>
         /// Images the update.
         /// </summary>
         /// <param name="bookId">The book identifier.</param>
