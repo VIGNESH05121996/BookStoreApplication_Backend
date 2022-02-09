@@ -142,5 +142,23 @@ namespace Business.Services
                 throw;
             }
         }
+
+        /// <summary>
+        /// Deletets the book with book identifier.
+        /// </summary>
+        /// <param name="bookId">The book identifier.</param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public bool DeletetBookWithBookId(long bookId, long jwtUserId)
+        {
+            try
+            {
+                return this.bookRL.DeletetBookWithBookId(bookId, jwtUserId);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }

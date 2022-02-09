@@ -61,6 +61,10 @@ namespace BookStoreApplication.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets all book.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult GetAllBook()
         {
@@ -177,6 +181,30 @@ namespace BookStoreApplication.Controllers
                 }
 
                 return Ok(new { Success = true, message = "BookImage Updated Successfully ", book });
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Deletets the book with book identifier.
+        /// </summary>
+        /// <param name="bookId">The book identifier.</param>
+        /// <returns></returns>
+        [HttpDelete("{bookId}")]
+        public IActionResult DeletetBookWithBookId(long bookId)
+        {
+            try
+            {
+                long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+                bool deleteBook = bookBL.DeletetBookWithBookId(bookId, jwtUserId);
+                if (deleteBook)
+                {
+                    return Ok(new { Success = true, message = "Book with Book Id Deleted " });
+                }
+                return NotFound(new { Success = false, message = "Invalid BookId" });
             }
             catch (Exception ex)
             {

@@ -349,5 +349,41 @@ namespace Repository.Services
                 throw new KeyNotFoundException("Cannot Update image because bookId is wrong");
             }
         }
+
+        /// <summary>
+        /// Deletets the book with book identifier.
+        /// </summary>
+        /// <param name="bookId">The book identifier.</param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public bool DeletetBookWithBookId(long bookId, long jwtUserId)
+        {
+            try
+            {
+                SqlCommand command = new("spDeleteBookWithBookId", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@BookId", bookId);
+                command.Parameters.AddWithValue("@UserId", jwtUserId);
+
+                this.connection.Open();
+                int result = command.ExecuteNonQuery();
+                if (result >= 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            finally
+            {
+                this.connection.Close();
+            }
+        }
     }
 }

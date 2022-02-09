@@ -66,5 +66,13 @@ namespace Repository.Interfaces
         /// <param name="jwtUserId">The JWT user identifier.</param>
         /// <returns></returns>
         BookResponseModel GetBookWithBookId(long bookId, long jwtUserId);
+
+        /// <summary>
+        /// Deletets the book with book identifier.
+        /// </summary>
+        /// <param name="bookId">The book identifier.</param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        bool DeletetBookWithBookId(long bookId, long jwtUserId);
     }
 }
