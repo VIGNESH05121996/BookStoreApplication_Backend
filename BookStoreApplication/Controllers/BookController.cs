@@ -61,6 +61,26 @@ namespace BookStoreApplication.Controllers
             }
         }
 
+        [HttpGet("{bookId}")]
+        public IActionResult GetBookWithBookId(long bookId)
+        {
+            try
+            {
+                long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+                BookResponseModel book = bookBL.GetBookWithBookId(bookId, jwtUserId);
+                if (book == null)
+                {
+                    return NotFound(new { Success = false, message = "Invalid BookId" });
+                }
+
+                return Ok(new { Success = true, message = "Retrived Book BooId ", book });
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
+
         /// <summary>
         /// Updates the book details.
         /// </summary>

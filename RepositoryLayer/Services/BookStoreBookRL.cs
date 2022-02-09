@@ -35,9 +35,9 @@ namespace Repository.Services
             this.config = config;
         }
 
-        public static string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=BookStoreDataBase;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+        private static string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=BookStoreDataBase;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
-        SqlConnection connection = new SqlConnection(connectionString);
+        private readonly SqlConnection connection = new(connectionString);
 
         /// <summary>
         /// Creates the book details.
@@ -88,6 +88,76 @@ namespace Repository.Services
         }
 
         /// <summary>
+        /// Gets the book with book identifier.
+        /// </summary>
+        /// <param name="bookId">The book identifier.</param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public BookResponseModel GetBookWithBookId(long bookId, long jwtUserId)
+        {
+            BookResponseModel responseModel = new();
+            SqlCommand command = new("spGetBookWithBookId", connection);
+            command.CommandType = CommandType.StoredProcedure;
+
+            this.connection.Open();
+            command.Parameters.AddWithValue("@BookId", bookId);
+            command.Parameters.AddWithValue("@UserId", jwtUserId);
+            SqlDataReader reader = command.ExecuteReader();
+
+            if(reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    responseModel.BookId = Convert.ToInt32(reader["BookId"]);
+                    responseModel.BookName = reader["BookName"].ToString();
+                    responseModel.BookAuthor = reader["BookAuthor"].ToString();
+                    responseModel.TotalRating = Convert.ToInt32(reader["TotalRating"]);
+                    responseModel.NoOfPeopleRated = Convert.ToInt32(reader["NoOfPeopleRated"]);
+                    responseModel.OriginalPrice = Convert.ToInt32(reader["OriginalPrice"]);
+                    responseModel.DiscountPrice = Convert.ToInt32(reader["DiscountPrice"]);
+                    responseModel.BookImage = reader["BookImage"].ToString();
+                    responseModel.BookQuantity = Convert.ToInt32(reader["BookQuantity"]);
+                    responseModel.BookDetails = reader["BookImage"].ToString();
+                    responseModel.UserId = Convert.ToInt32(reader["UserId"]);
+                }
+                return responseModel;
+            }
+            return null;
+        }
+
+        public BookResponseModel GetWithBookId(long bookId,long jwtUserId)
+        {
+            BookResponseModel responseModel = new();
+            SqlCommand command = new("spGetBookWithBookId", connection);
+            command.CommandType = CommandType.StoredProcedure;
+
+            this.connection.Open();
+            command.Parameters.AddWithValue("@BookId", bookId);
+            command.Parameters.AddWithValue("@UserId", jwtUserId);
+            SqlDataReader reader = command.ExecuteReader();
+
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    responseModel.BookId = Convert.ToInt32(reader["BookId"]);
+                    responseModel.BookName = reader["BookName"].ToString();
+                    responseModel.BookAuthor = reader["BookAuthor"].ToString();
+                    responseModel.TotalRating = Convert.ToInt32(reader["TotalRating"]);
+                    responseModel.NoOfPeopleRated = Convert.ToInt32(reader["NoOfPeopleRated"]);
+                    responseModel.OriginalPrice = Convert.ToInt32(reader["OriginalPrice"]);
+                    responseModel.DiscountPrice = Convert.ToInt32(reader["DiscountPrice"]);
+                    responseModel.BookImage = reader["BookImage"].ToString();
+                    responseModel.BookQuantity = Convert.ToInt32(reader["BookQuantity"]);
+                    responseModel.BookDetails = reader["BookImage"].ToString();
+                    responseModel.UserId = Convert.ToInt32(reader["UserId"]);
+                }
+                return responseModel;
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Update Book Details
         /// </summary>
         /// <param name="bookId"></param>
@@ -116,18 +186,7 @@ namespace Repository.Services
                     this.connection.Close();
                     if (result >= 0)
                     {
-                        BookResponseModel response = new()
-                        {
-                            BookId = bookId,
-                            BookName = model.BookName,
-                            BookAuthor = model.BookAuthor,
-                            OriginalPrice = model.OriginalPrice,
-                            DiscountPrice = model.DiscountPrice,
-                            BookQuantity = model.BookQuantity,
-                            BookDetails = model.BookDetails,
-                            UserId = jwtUserId
-                        };
-                        return response;
+                        return GetWithBookId(bookId,jwtUserId);
                     }
                 }
                 return null;
@@ -164,14 +223,7 @@ namespace Repository.Services
                     this.connection.Close();
                     if (result >= 0)
                     {
-                        BookResponseModel response = new()
-                        {
-                            BookId = bookId,
-                            TotalRating = model.TotalRating,
-                            NoOfPeopleRated = model.NoOfPeopleRated,
-                            UserId = jwtUserId
-                        };
-                        return response;
+                        return GetWithBookId(bookId, jwtUserId);
                     }
                 }
                 return null;
@@ -194,17 +246,17 @@ namespace Repository.Services
         {
             try
             {
-                Account account = new Account(this.config["Cloudinary:CloudName"], this.config["Cloudinary:APIKey"], this.config["Cloudinary:APISecret"]);
+                Account account = new(this.config["Cloudinary:CloudName"], this.config["Cloudinary:APIKey"], this.config["Cloudinary:APISecret"]);
                 var imagePath = bookImage.OpenReadStream();
-                Cloudinary cloudinary = new Cloudinary(account);
-                ImageUploadParams imageParams = new ImageUploadParams()
+                Cloudinary cloudinary = new(account);
+                ImageUploadParams imageParams = new()
                 {
                     File = new FileDescription(bookImage.FileName, imagePath)
                 };
                 string uploadImage = cloudinary.Upload(imageParams).Url.ToString();
                 using (connection)
                 {
-                    SqlCommand command = new SqlCommand("spBookImageUpdate", connection);
+                    SqlCommand command = new("spBookImageUpdate", connection);
                     command.CommandType = CommandType.StoredProcedure;
 
                     command.Parameters.AddWithValue("@BookId", bookId);
@@ -215,13 +267,7 @@ namespace Repository.Services
                     this.connection.Close();
                     if (result >= 0)
                     {
-                        BookResponseModel response = new()
-                        {
-                            BookId = bookId,
-                            BookImage = uploadImage,
-                            UserId = jwtUserId
-                        };
-                        return response;
+                        return GetWithBookId(bookId, jwtUserId);
                     }
                 }
                 return null;
