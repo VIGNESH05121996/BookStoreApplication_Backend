@@ -49,12 +49,12 @@ namespace BookStoreApplication.Controllers
             try
             {
                 long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
-                AddCartResponse book = cartBL.AddCart(bookId, model, jwtUserId);
-                if (book == null)
+                AddCartResponse cart = cartBL.AddCart(bookId, model, jwtUserId);
+                if (cart == null)
                 {
                     return NotFound(new { Success = false, message = "Not able to Book to cart since bookId is wrong" });
                 }
-                return Ok(new { Success = true, message = "Book added to cart", book });
+                return Ok(new { Success = true, message = "Book added to cart", cart });
             }
             catch (Exception ex)
             {
@@ -62,19 +62,49 @@ namespace BookStoreApplication.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets all cart.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult GetAllCart()
+        {
+            try
+            {
+                long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+                IEnumerable<CartResponseModel> cart = cartBL.GetAllCart(jwtUserId);
+                if (cart == null)
+                {
+                    return NotFound(new { Success = false, message = "Invalid Cart" });
+                }
+
+                return Ok(new { Success = true, message = "Retrived All Cart ", cart });
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Updates the cart.
+        /// </summary>
+        /// <param name="cartId">The cart identifier.</param>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
         [HttpPut("{cartId}")]
         public IActionResult UpdateCart(long cartId, UpdateCartModel model)
         {
             try
             {
                 long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
-                CartResponseModel book = cartBL.UpdateCart(cartId, model, jwtUserId);
-                if (book == null)
+                CartResponseModel cart = cartBL.UpdateCart(cartId, model, jwtUserId);
+                if (cart == null)
                 {
                     return NotFound(new { Success = false, message = "Invalid cartId to update" });
                 }
 
-                return Ok(new { Success = true, message = "Cart Updated Successfully ", book });
+                return Ok(new { Success = true, message = "Cart Updated Successfully ", cart });
             }
             catch (Exception ex)
             {

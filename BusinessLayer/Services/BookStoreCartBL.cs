@@ -70,5 +70,22 @@ namespace Business.Services
                 throw;
             }
         }
+
+        /// <summary>
+        /// Gets all cart.
+        /// </summary>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public IEnumerable<CartResponseModel> GetAllCart(long jwtUserId)
+        {
+            try
+            {
+                return this.cartRL.GetAllCart(jwtUserId);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }

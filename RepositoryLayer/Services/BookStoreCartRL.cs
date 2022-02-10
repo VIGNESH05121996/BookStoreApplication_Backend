@@ -186,5 +186,48 @@ namespace Repository.Services
                 throw new KeyNotFoundException("Cannot Add Detail To DataBase Since No User Found");
             }
         }
+
+        public IEnumerable<CartResponseModel> GetAllCart(long jwtUserId)
+        {
+            try
+            {
+                List<CartResponseModel> responseModel = new();
+                SqlCommand command = new("spGetAllCart", connection);
+                command.CommandType = CommandType.StoredProcedure;
+
+                this.connection.Open();
+                command.Parameters.AddWithValue("@UserId", jwtUserId);
+                SqlDataAdapter dataAdapter = new(command);
+                DataTable dataTable = new();
+                dataAdapter.Fill(dataTable);
+                foreach (DataRow dataRow in dataTable.Rows)
+                {
+                    responseModel.Add(
+                         new CartResponseModel
+                         {
+                             CartId = Convert.ToInt32(dataRow["CartId"]),
+                             Quantity = Convert.ToInt32(dataRow["Quantity"]),
+                             BookId = Convert.ToInt32(dataRow["BookId"]),
+                             UserId = Convert.ToInt32(dataRow["UserId"]),
+                             BookName = dataRow["BookName"].ToString(),
+                             BookAuthor = dataRow["BookAuthor"].ToString(),
+                             OriginalPrice = Convert.ToInt32(dataRow["OriginalPrice"]),
+                             DiscountPrice = Convert.ToInt32(dataRow["DiscountPrice"]),
+                             BookImage = dataRow["BookImage"].ToString(),
+                             BookDetails = dataRow["BookDetails"].ToString(),
+                         }
+                     );
+                }
+                return responseModel;
+            }
+            catch (Exception ex)
+            {
+                throw new KeyNotFoundException("Cannot fetch details because bookId is wrong");
+            }
+            finally
+            {
+                this.connection.Close();
+            }
+        }
     }
 }

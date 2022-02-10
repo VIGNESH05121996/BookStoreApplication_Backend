@@ -33,5 +33,12 @@ namespace Business.Interfaces
         /// <param name="jwtUserId">The JWT user identifier.</param>
         /// <returns></returns>
         CartResponseModel UpdateCart(long cartId, UpdateCartModel model, long jwtUserId);
+
+        /// <summary>
+        /// Gets all cart.
+        /// </summary>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        IEnumerable<CartResponseModel> GetAllCart(long jwtUserId);
     }
 }
