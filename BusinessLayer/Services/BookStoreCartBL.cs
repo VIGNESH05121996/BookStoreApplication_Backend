@@ -51,5 +51,24 @@ namespace Business.Services
                 throw;
             }
         }
+
+        /// <summary>
+        /// Updates the cart.
+        /// </summary>
+        /// <param name="cartId">The cart identifier.</param>
+        /// <param name="model">The model.</param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public CartResponseModel UpdateCart(long cartId, UpdateCartModel model, long jwtUserId)
+        {
+            try
+            {
+                return this.cartRL.UpdateCart(cartId, model, jwtUserId);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }

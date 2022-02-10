@@ -61,5 +61,25 @@ namespace BookStoreApplication.Controllers
                 return NotFound(new { message = ex.Message });
             }
         }
+
+        [HttpPut("{cartId}")]
+        public IActionResult UpdateCart(long cartId, UpdateCartModel model)
+        {
+            try
+            {
+                long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+                CartResponseModel book = cartBL.UpdateCart(cartId, model, jwtUserId);
+                if (book == null)
+                {
+                    return NotFound(new { Success = false, message = "Invalid cartId to update" });
+                }
+
+                return Ok(new { Success = true, message = "Cart Updated Successfully ", book });
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
     }
 }

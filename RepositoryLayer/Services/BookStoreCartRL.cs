@@ -33,7 +33,7 @@ namespace Repository.Services
         /// <param name="jwtUserId">The JWT user identifier.</param>
         /// <returns></returns>
         /// <exception cref="System.Collections.Generic.KeyNotFoundException">Cannot fetch details because bookId is wrong</exception>
-        public CartResponseModel GetCartWithId(long bookId, long cartId, long jwtUserId)
+        public CartResponseModel GetCartWithId(long cartId, long jwtUserId)
         {
             try
             {
@@ -43,7 +43,6 @@ namespace Repository.Services
 
                 this.connection.Open();
                 command.Parameters.AddWithValue("@CartId", cartId);
-                command.Parameters.AddWithValue("@BookId", bookId);
                 command.Parameters.AddWithValue("@UserId", jwtUserId);
                 SqlDataReader reader = command.ExecuteReader();
 
@@ -51,8 +50,8 @@ namespace Repository.Services
                 {
                     while (reader.Read())
                     {
-                        responseModel.BookId = Convert.ToInt32(reader["CartId"]);
-                        responseModel.BookId = Convert.ToInt32(reader["Quantity"]);
+                        responseModel.CartId = Convert.ToInt32(reader["CartId"]);
+                        responseModel.Quantity = Convert.ToInt32(reader["Quantity"]);
                         responseModel.BookId = Convert.ToInt32(reader["BookId"]);
                         responseModel.UserId = Convert.ToInt32(reader["UserId"]);
                         responseModel.BookName = reader["BookName"].ToString();
@@ -125,6 +124,57 @@ namespace Repository.Services
                                 UserId = validationModel.UserId
                             };
                             return response;
+                        }
+                    }
+                }
+                sqlConnection.Close();
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new KeyNotFoundException("Cannot Add Detail To DataBase Since No User Found");
+            }
+        }
+
+        public CartResponseModel UpdateCart(long cartId, UpdateCartModel model, long jwtUserId)
+        {
+            try
+            {
+                SqlConnection sqlConnection = new(connectionString);
+                string query = "select UserId from UserTable where UserId=@UserId ";
+                SqlCommand validateCommand = new(query, sqlConnection);
+                BookValidationModel validationModel = new();
+
+                sqlConnection.Open();
+                validateCommand.Parameters.AddWithValue("@UserId", jwtUserId);
+                SqlDataReader reader = validateCommand.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        validationModel.UserId = Convert.ToInt32(reader["UserId"]);
+                    }
+                    using (connection)
+                    {
+                        SqlCommand command = new("spUpdateCart", connection);
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        command.Parameters.AddWithValue("@CartId", cartId);
+                        command.Parameters.AddWithValue("@Quantity", model.Quantity);
+                        command.Parameters.AddWithValue("@UserId", jwtUserId);
+                        this.connection.Open();
+                        int result = command.ExecuteNonQuery();
+                        this.connection.Close();
+                        if (result >= 0)
+                        {
+                            AddCartResponse response = new()
+                            {
+                                BookId = validationModel.BookId,
+                                Quantity = model.Quantity,
+                                UserId = validationModel.UserId
+                            };
+                            return GetCartWithId(cartId, validationModel.UserId);
                         }
                     }
                 }

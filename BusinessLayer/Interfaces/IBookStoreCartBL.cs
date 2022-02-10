@@ -24,5 +24,14 @@ namespace Business.Interfaces
         /// <param name="jwtUserId">The JWT user identifier.</param>
         /// <returns></returns>
         AddCartResponse AddCart(long bookId, AddCartModel model, long jwtUserId);
+
+        /// <summary>
+        /// Updates the cart.
+        /// </summary>
+        /// <param name="cartId">The cart identifier.</param>
+        /// <param name="model">The model.</param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        CartResponseModel UpdateCart(long cartId, UpdateCartModel model, long jwtUserId);
     }
 }
