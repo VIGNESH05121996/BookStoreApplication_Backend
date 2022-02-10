@@ -186,6 +186,12 @@ namespace Repository.Services
             }
         }
 
+        /// <summary>
+        /// Get Book With Id
+        /// </summary>
+        /// <param name="bookId"></param>
+        /// <param name="jwtUserId"></param>
+        /// <returns></returns>
         public BookResponseModel GetWithBookId(long bookId,long jwtUserId)
         {
             try
