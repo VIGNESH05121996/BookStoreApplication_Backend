@@ -114,12 +114,12 @@ namespace Repository.Services
                              BookId = Convert.ToInt32(dataRow["BookId"]),
                              BookName = Convert.ToString(dataRow["BookName"]),
                              BookAuthor = Convert.ToString(dataRow["BookAuthor"]),
-                             TotalRating = Convert.ToInt32(dataRow["TotalRating"]),
-                             NoOfPeopleRated = Convert.ToInt32(dataRow["NoOfPeopleRated"]),
-                             OriginalPrice = Convert.ToInt32(dataRow["OriginalPrice"]),
-                             DiscountPrice = Convert.ToInt32(dataRow["DiscountPrice"]),
+                             TotalRating = Convert.ToInt32(dataRow["TotalRating"] == DBNull.Value ? default : dataRow["TotalRating"]),
+                             NoOfPeopleRated = Convert.ToInt32(dataRow["NoOfPeopleRated"] == DBNull.Value ? default : dataRow["NoOfPeopleRated"]),
+                             OriginalPrice = Convert.ToInt32(dataRow["OriginalPrice"] == DBNull.Value ? default : dataRow["OriginalPrice"]),
+                             DiscountPrice = Convert.ToInt32(dataRow["DiscountPrice"] == DBNull.Value ? default : dataRow["DiscountPrice"]),
                              BookImage = Convert.ToString(dataRow["BookImage"]),
-                             BookQuantity = Convert.ToInt32(dataRow["BookQuantity"]),
+                             BookQuantity = Convert.ToInt32(dataRow["BookQuantity"] == DBNull.Value ? default : dataRow["BookQuantity"]),
                              BookDetails = Convert.ToString(dataRow["BookDetails"]),
                              UserId = Convert.ToInt32(dataRow["UserId"]),
                          }
@@ -129,7 +129,7 @@ namespace Repository.Services
             }
             catch (Exception ex)
             {
-                throw new KeyNotFoundException("Invalid user to fetch details");
+                throw new KeyNotFoundException("Cannot fetch details");
             }
             finally
             {
@@ -163,12 +163,12 @@ namespace Repository.Services
                         responseModel.BookId = Convert.ToInt32(reader["BookId"]);
                         responseModel.BookName = reader["BookName"].ToString();
                         responseModel.BookAuthor = reader["BookAuthor"].ToString();
-                        responseModel.TotalRating = Convert.ToInt32(reader["TotalRating"]);
-                        responseModel.NoOfPeopleRated = Convert.ToInt32(reader["NoOfPeopleRated"]);
-                        responseModel.OriginalPrice = Convert.ToInt32(reader["OriginalPrice"]);
-                        responseModel.DiscountPrice = Convert.ToInt32(reader["DiscountPrice"]);
+                        responseModel.TotalRating = Convert.ToInt32(reader["TotalRating"] == DBNull.Value ? default : reader["TotalRating"]);
+                        responseModel.NoOfPeopleRated = Convert.ToInt32(reader["NoOfPeopleRated"] == DBNull.Value ? default : reader["NoOfPeopleRated"]);
+                        responseModel.OriginalPrice = Convert.ToInt32(reader["OriginalPrice"] == DBNull.Value ? default : reader["OriginalPrice"]);
+                        responseModel.DiscountPrice = Convert.ToInt32(reader["DiscountPrice"] == DBNull.Value ? default : reader["DiscountPrice"]);
                         responseModel.BookImage = reader["BookImage"].ToString();
-                        responseModel.BookQuantity = Convert.ToInt32(reader["BookQuantity"]);
+                        responseModel.BookQuantity = Convert.ToInt32(reader["BookQuantity"] == DBNull.Value ? default : reader["BookQuantity"]);
                         responseModel.BookDetails = reader["BookDetails"].ToString();
                         responseModel.UserId = Convert.ToInt32(reader["UserId"]);
                     }
@@ -212,12 +212,12 @@ namespace Repository.Services
                         responseModel.BookId = Convert.ToInt32(reader["BookId"]);
                         responseModel.BookName = reader["BookName"].ToString();
                         responseModel.BookAuthor = reader["BookAuthor"].ToString();
-                        responseModel.TotalRating = Convert.ToInt32(reader["TotalRating"]);
-                        responseModel.NoOfPeopleRated = Convert.ToInt32(reader["NoOfPeopleRated"]);
-                        responseModel.OriginalPrice = Convert.ToInt32(reader["OriginalPrice"]);
-                        responseModel.DiscountPrice = Convert.ToInt32(reader["DiscountPrice"]);
+                        responseModel.TotalRating = Convert.ToInt32(reader["TotalRating"] == DBNull.Value ? default : reader["TotalRating"]);
+                        responseModel.NoOfPeopleRated = Convert.ToInt32(reader["NoOfPeopleRated"] == DBNull.Value ? default : reader["NoOfPeopleRated"]);
+                        responseModel.OriginalPrice = Convert.ToInt32(reader["OriginalPrice"] == DBNull.Value ? default : reader["OriginalPrice"]);
+                        responseModel.DiscountPrice = Convert.ToInt32(reader["DiscountPrice"] == DBNull.Value ? default : reader["DiscountPrice"]);
                         responseModel.BookImage = reader["BookImage"].ToString();
-                        responseModel.BookQuantity = Convert.ToInt32(reader["BookQuantity"]);
+                        responseModel.BookQuantity = Convert.ToInt32(reader["BookQuantity"] == DBNull.Value ? default : reader["BookQuantity"]);
                         responseModel.BookDetails = reader["BookDetails"].ToString();
                         responseModel.UserId = Convert.ToInt32(reader["UserId"]);
                     }

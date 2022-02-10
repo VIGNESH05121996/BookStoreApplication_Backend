@@ -87,5 +87,23 @@ namespace Business.Services
                 throw;
             }
         }
+
+        /// <summary>
+        /// Deletes the cart with cart identifier.
+        /// </summary>
+        /// <param name="cartId">The cart identifier.</param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public bool DeleteCartWithCartId(long cartId, long jwtUserId)
+        {
+            try
+            {
+                return this.cartRL.DeleteCartWithCartId(cartId,jwtUserId);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }

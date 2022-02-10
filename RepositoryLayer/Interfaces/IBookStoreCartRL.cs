@@ -41,5 +41,13 @@ namespace Repository.Interfaces
         /// <param name="jwtUserId">The JWT user identifier.</param>
         /// <returns></returns>
         IEnumerable<CartResponseModel> GetAllCart(long jwtUserId);
+
+        /// <summary>
+        /// Deletes the cart with cart identifier.
+        /// </summary>
+        /// <param name="cartId">The cart identifier.</param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        bool DeleteCartWithCartId(long cartId, long jwtUserId);
     }
 }

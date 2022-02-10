@@ -111,5 +111,29 @@ namespace BookStoreApplication.Controllers
                 return NotFound(new { message = ex.Message });
             }
         }
+
+        /// <summary>
+        /// Deletets the book with book identifier.
+        /// </summary>
+        /// <param name="bookId">The book identifier.</param>
+        /// <returns></returns>
+        [HttpDelete("{cartId}")]
+        public IActionResult DeleteCartWithCartId(long cartId)
+        {
+            try
+            {
+                long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+                bool deleteBook = cartBL.DeleteCartWithCartId(cartId, jwtUserId);
+                if (deleteBook)
+                {
+                    return Ok(new { Success = true, message = "Cart Deleted " });
+                }
+                return NotFound(new { Success = false, message = "Invalid CartId" });
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
     }
 }

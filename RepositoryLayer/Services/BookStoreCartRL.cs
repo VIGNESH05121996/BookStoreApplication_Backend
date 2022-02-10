@@ -136,6 +136,13 @@ namespace Repository.Services
             }
         }
 
+        /// <summary>
+        /// Update Cart 
+        /// </summary>
+        /// <param name="cartId"></param>
+        /// <param name="model"></param>
+        /// <param name="jwtUserId"></param>
+        /// <returns></returns>
         public CartResponseModel UpdateCart(long cartId, UpdateCartModel model, long jwtUserId)
         {
             try
@@ -187,6 +194,11 @@ namespace Repository.Services
             }
         }
 
+        /// <summary>
+        /// Get All Cart
+        /// </summary>
+        /// <param name="jwtUserId"></param>
+        /// <returns></returns>
         public IEnumerable<CartResponseModel> GetAllCart(long jwtUserId)
         {
             try
@@ -223,6 +235,36 @@ namespace Repository.Services
             catch (Exception ex)
             {
                 throw new KeyNotFoundException("Cannot fetch details because bookId is wrong");
+            }
+            finally
+            {
+                this.connection.Close();
+            }
+        }
+
+        public bool DeleteCartWithCartId(long cartId, long jwtUserId)
+        {
+            try
+            {
+                SqlCommand command = new("spDeleteCartWithCartId", connection);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@CartId", cartId);
+                command.Parameters.AddWithValue("@UserId", jwtUserId);
+
+                this.connection.Open();
+                int result = command.ExecuteNonQuery();
+                if (result >= 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
             }
             finally
             {
