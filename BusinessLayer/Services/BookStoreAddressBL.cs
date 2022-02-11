@@ -32,11 +32,35 @@ namespace Business.Services
             this.addressRL = addressRL;
         }
 
+        /// <summary>
+        /// Adds the address.
+        /// </summary>
+        /// <param name="typeId">The type identifier.</param>
+        /// <param name="model"></param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
         public AddressResponseModel AddAddress(long typeId, AddAdressModel model, long jwtUserId)
         {
             try
             {
                 return this.addressRL.AddAddress(typeId, model, jwtUserId);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Gets all address.
+        /// </summary>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public IEnumerable<AddressResponseModel> GetAllAddress(long jwtUserId)
+        {
+            try
+            {
+                return this.addressRL.GetAllAddress(jwtUserId);
             }
             catch (Exception ex)
             {

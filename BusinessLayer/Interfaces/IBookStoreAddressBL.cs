@@ -23,5 +23,12 @@ namespace Business.Interfaces
         /// <param name="jwtUserId">The JWT user identifier.</param>
         /// <returns></returns>
         AddressResponseModel AddAddress(long typeId, AddAdressModel model, long jwtUserId);
+
+        /// <summary>
+        /// Gets all address.
+        /// </summary>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        IEnumerable<AddressResponseModel> GetAllAddress(long jwtUserId);
     }
 }

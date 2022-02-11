@@ -88,5 +88,50 @@ namespace Repository.Services
                 throw new KeyNotFoundException("Cannot Add Detail To DataBase Since No User Found");
             }
         }
+
+        /// <summary>
+        /// Gets all address.
+        /// </summary>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public IEnumerable<AddressResponseModel> GetAllAddress(long jwtUserId)
+        {
+            try
+            {
+                List<AddressResponseModel> responseModel = new();
+                SqlCommand command = new("spGetAllAddress", connection);
+                command.CommandType = CommandType.StoredProcedure;
+
+                this.connection.Open();
+                command.Parameters.AddWithValue("@UserId", jwtUserId);
+                SqlDataAdapter dataAdapter = new(command);
+                DataTable dataTable = new();
+                dataAdapter.Fill(dataTable);
+                foreach (DataRow dataRow in dataTable.Rows)
+                {
+                    responseModel.Add(
+                         new AddressResponseModel
+                         {
+                             TypeId = Convert.ToInt32(dataRow["TypeId"]),
+                             FullName = dataRow["FullName"].ToString(),
+                             FullAddress = dataRow["FullAddress"].ToString(),
+                             City = dataRow["City"].ToString(),
+                             State = dataRow["State"].ToString(),
+                             UserId = Convert.ToInt32(dataRow["UserId"])
+                         }
+                     );
+                }
+                return responseModel;
+            }
+            catch (Exception ex)
+            {
+                throw new KeyNotFoundException(ex.Message);
+            }
+            finally
+            {
+                this.connection.Close();
+            }
+        }
     }
 }
+

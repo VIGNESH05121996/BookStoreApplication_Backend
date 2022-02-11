@@ -60,5 +60,29 @@ namespace BookStoreApplication.Controllers
                 return NotFound(new { message = ex.Message });
             }
         }
+
+        /// <summary>
+        /// Gets all cart.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult GetAllAddress()
+        {
+            try
+            {
+                long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+                IEnumerable<AddressResponseModel> address = addressBL.GetAllAddress(jwtUserId);
+                if (address == null)
+                {
+                    return NotFound(new { Success = false, message = "Invalid Cart" });
+                }
+
+                return Ok(new { Success = true, message = "Retrived All Cart ", address });
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
     }
 }
