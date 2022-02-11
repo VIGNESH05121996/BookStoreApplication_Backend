@@ -43,7 +43,7 @@ namespace BookStoreApplication.Controllers
         /// <param name="bookId"></param>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost("{bookId}/cart")]
+        [HttpPost("{bookId}")]
         public IActionResult AddCart(long bookId,AddCartModel model)
         {
             try
