@@ -67,5 +67,24 @@ namespace Business.Services
                 throw;
             }
         }
+
+        /// <summary>
+        /// Updates the address.
+        /// </summary>
+        /// <param name="addressId">The address identifier.</param>
+        /// <param name="model">The model.</param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public UpdateResponseModel UpdateAddress(long addressId, UpdateAddressModel model, long jwtUserId)
+        {
+            try
+            {
+                return this.addressRL.UpdateAddress(addressId, model, jwtUserId);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }

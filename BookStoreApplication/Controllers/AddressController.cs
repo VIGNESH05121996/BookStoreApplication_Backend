@@ -51,9 +51,9 @@ namespace BookStoreApplication.Controllers
                 AddressResponseModel address = addressBL.AddAddress(typeId, model, jwtUserId);
                 if (address != null)
                 {
-                    return Ok(new { Success = true, message = "Book added to wish list", address });
+                    return Ok(new { Success = true, message = "Address Added Successfully", address });
                 }
-                return NotFound(new { Success = false, message = "Not able to Book to wish list since bookId is wrong" });
+                return NotFound(new { Success = false, message = "Not able to add adress since typeId is wrong" });
             }
             catch (Exception ex)
             {
@@ -74,10 +74,36 @@ namespace BookStoreApplication.Controllers
                 IEnumerable<AddressResponseModel> address = addressBL.GetAllAddress(jwtUserId);
                 if (address == null)
                 {
-                    return NotFound(new { Success = false, message = "Invalid Cart" });
+                    return NotFound(new { Success = false, message = "Invalid userId" });
                 }
 
-                return Ok(new { Success = true, message = "Retrived All Cart ", address });
+                return Ok(new { Success = true, message = "Retrived All Address ", address });
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Updates the address.
+        /// </summary>
+        /// <param name="addressId">The address identifier.</param>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        [HttpPut("{addressId}")]
+        public IActionResult UpdateAddress(long addressId, UpdateAddressModel model)
+        {
+            try
+            {
+                long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+                UpdateResponseModel address = addressBL.UpdateAddress(addressId, model, jwtUserId);
+                if (address == null)
+                {
+                    return NotFound(new { Success = false, message = "Invalid addressId to update" });
+                }
+
+                return Ok(new { Success = true, message = "Address Updated Successfully ", address });
             }
             catch (Exception ex)
             {

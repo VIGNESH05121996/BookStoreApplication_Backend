@@ -31,5 +31,14 @@ namespace Repository.Interfaces
         /// <param name="jwtUserId">The JWT user identifier.</param>
         /// <returns></returns>
         IEnumerable<AddressResponseModel> GetAllAddress(long jwtUserId);
+
+        /// <summary>
+        /// Updates the address.
+        /// </summary>
+        /// <param name="addressId">The address identifier.</param>
+        /// <param name="model">The model.</param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        UpdateResponseModel UpdateAddress(long addressId, UpdateAddressModel model, long jwtUserId);
     }
 }
