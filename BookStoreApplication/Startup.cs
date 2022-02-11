@@ -46,6 +46,8 @@ namespace BookStoreApplication
             services.AddTransient<IBookStoreCartRL, BookStoreCartRL>();
             services.AddTransient<IBookStoreWishListBL, BookStoreWishListBL>();
             services.AddTransient<IBookStoreWishListRL, BookStoreWishListRL>();
+            services.AddTransient<IBookStoreFeedBackBL, BookStoreFeedBackBL>();
+            services.AddTransient<IBookStoreFeedBackRL, BookStoreFeedBackRL>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
