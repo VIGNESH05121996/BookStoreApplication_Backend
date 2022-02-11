@@ -234,6 +234,52 @@ namespace Repository.Services
                 throw new KeyNotFoundException("Cannot Update Detail To DataBase Since No User Found");
             }
         }
+
+        /// <summary>
+        /// Deletes the address with address identifier.
+        /// </summary>
+        /// <param name="addressId">The address identifier.</param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public bool DeleteAddressWithAddressId(long addressId, long jwtUserId)
+        {
+            try
+            {
+                SqlConnection sqlConnection = new(connectionString);
+                string query = "select UserId from UserTable where UserId=@UserId ";
+                SqlCommand validateCommand = new(query, sqlConnection);
+                BookValidationModel validationModel = new();
+
+                sqlConnection.Open();
+                validateCommand.Parameters.AddWithValue("@UserId", jwtUserId);
+                SqlDataReader reader = validateCommand.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        validationModel.UserId = Convert.ToInt32(reader["UserId"]);
+                    }
+                    SqlCommand command = new("spDeleteAddressWithAddressId", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@UserId", validationModel.UserId);
+                    command.Parameters.AddWithValue("@AddressId", addressId);
+                    this.connection.Open();
+                    int result = command.ExecuteNonQuery();
+                    this.connection.Close();
+                    if (result >= 0)
+                    {
+                        return true;
+                    }
+                }
+                sqlConnection.Close();
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new KeyNotFoundException("Cannot Delete Address from DataBase Since No User Found");
+            }
+        }
     }
 }
 

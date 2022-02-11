@@ -103,7 +103,7 @@ namespace Repository.Services
                     }
                     SqlCommand command = new("spDeleteWishListWithWishListtId", connection);
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.AddWithValue("@UserId", jwtUserId);
+                    command.Parameters.AddWithValue("@UserId", validationModel.UserId);
                     command.Parameters.AddWithValue("@WishListId", wishListId);
                     this.connection.Open();
                     int result = command.ExecuteNonQuery();
@@ -118,7 +118,7 @@ namespace Repository.Services
             }
             catch (Exception ex)
             {
-                throw new KeyNotFoundException("Cannot Delete WiahList from DataBase Since No User Found");
+                throw new KeyNotFoundException("Cannot Delete WishList from DataBase Since No User Found");
             }
         }
 

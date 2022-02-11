@@ -86,5 +86,23 @@ namespace Business.Services
                 throw;
             }
         }
+
+        /// <summary>
+        /// Deletes the address with address identifier.
+        /// </summary>
+        /// <param name="addressId">The address identifier.</param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public bool DeleteAddressWithAddressId(long addressId, long jwtUserId)
+        {
+            try
+            {
+                return this.addressRL.DeleteAddressWithAddressId(addressId, jwtUserId);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }

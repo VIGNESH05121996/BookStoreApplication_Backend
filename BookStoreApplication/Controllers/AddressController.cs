@@ -110,5 +110,29 @@ namespace BookStoreApplication.Controllers
                 return NotFound(new { message = ex.Message });
             }
         }
+
+        /// <summary>
+        /// Deletes the address with address identifier.
+        /// </summary>
+        /// <param name="addressId">The address identifier.</param>
+        /// <returns></returns>
+        [HttpDelete("{addressId}")]
+        public IActionResult DeleteAddressWithAddressId(long addressId)
+        {
+            try
+            {
+                long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+                bool deleteAddress = addressBL.DeleteAddressWithAddressId(addressId, jwtUserId);
+                if (deleteAddress)
+                {
+                    return Ok(new { Success = true, message = "Address Deleted " });
+                }
+                return NotFound(new { Success = false, message = "Invalid addressId" });
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
     }
 }

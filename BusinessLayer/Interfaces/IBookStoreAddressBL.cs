@@ -39,5 +39,13 @@ namespace Business.Interfaces
         /// <param name="jwtUserId">The JWT user identifier.</param>
         /// <returns></returns>
         UpdateResponseModel UpdateAddress(long addressId, UpdateAddressModel model, long jwtUserId);
+
+        /// <summary>
+        /// Deletes the address with address identifier.
+        /// </summary>
+        /// <param name="addressId">The address identifier.</param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        bool DeleteAddressWithAddressId(long addressId, long jwtUserId);
     }
 }
