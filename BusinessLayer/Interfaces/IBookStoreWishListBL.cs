@@ -4,6 +4,7 @@
 
 namespace Business.Interfaces
 {
+    using Common.WishListModel;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -30,5 +31,12 @@ namespace Business.Interfaces
         /// <param name="jwtUserId">The JWT user identifier.</param>
         /// <returns></returns>
         bool DeleteWishListWithWishListId(long wishListId, long jwtUserId);
+
+        /// <summary>
+        /// Gets all wish list.
+        /// </summary>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        IEnumerable<WishListResponseModel> GetAllWishList(long jwtUserId);
     }
 }

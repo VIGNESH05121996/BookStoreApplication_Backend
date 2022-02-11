@@ -5,6 +5,7 @@
 namespace BookStoreApplication.Controllers
 {
     using Business.Interfaces;
+    using Common.WishListModel;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
@@ -53,6 +54,30 @@ namespace BookStoreApplication.Controllers
                     return Ok(new { Success = true, message = "Book added to wish list"});
                 }
                 return NotFound(new { Success = false, message = "Not able to Book to wish list since bookId is wrong" });
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Gets all wish list.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult GetAllWishList()
+        {
+            try
+            {
+                long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+                IEnumerable<WishListResponseModel> wishLists = wishListBL.GetAllWishList(jwtUserId);
+                if (wishLists == null)
+                {
+                    return NotFound(new { Success = false, message = "Invalid Wish" });
+                }
+
+                return Ok(new { Success = true, message = "Retrived All Wish ", wishLists });
             }
             catch (Exception ex)
             {

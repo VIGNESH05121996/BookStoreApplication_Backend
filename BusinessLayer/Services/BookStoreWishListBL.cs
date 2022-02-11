@@ -5,6 +5,7 @@
 namespace Business.Services
 {
     using Business.Interfaces;
+    using Common.WishListModel;
     using Repository.Interfaces;
     using System;
     using System.Collections.Generic;
@@ -60,6 +61,23 @@ namespace Business.Services
             try
             {
                 return this.wishListRL.DeleteWishListWithWishListId(wishListId, jwtUserId);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Gets all wish list.
+        /// </summary>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public IEnumerable<WishListResponseModel> GetAllWishList(long jwtUserId)
+        {
+            try
+            {
+                return this.wishListRL.GetAllWishList(jwtUserId);
             }
             catch (Exception ex)
             {

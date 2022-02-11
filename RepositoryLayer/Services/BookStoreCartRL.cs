@@ -234,7 +234,7 @@ namespace Repository.Services
             }
             catch (Exception ex)
             {
-                throw new KeyNotFoundException("Cannot fetch details because bookId is wrong");
+                throw new KeyNotFoundException("Cannot fetch details because userId is wrong");
             }
             finally
             {

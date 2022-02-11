@@ -5,6 +5,7 @@
 namespace Repository.Services
 {
     using Common.BookModel;
+    using Common.WishListModel;
     using Repository.Interfaces;
     using System;
     using System.Collections.Generic;
@@ -118,6 +119,54 @@ namespace Repository.Services
             catch (Exception ex)
             {
                 throw new KeyNotFoundException("Cannot Delete WiahList from DataBase Since No User Found");
+            }
+        }
+
+        /// <summary>
+        /// Gets all wish list.
+        /// </summary>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Collections.Generic.KeyNotFoundException">Cannot fetch details because userId is wrong</exception>
+        public IEnumerable<WishListResponseModel> GetAllWishList(long jwtUserId)
+        {
+            try
+            {
+                List<WishListResponseModel> responseModel = new();
+                SqlCommand command = new("spGetAllWishList", connection);
+                command.CommandType = CommandType.StoredProcedure;
+
+                this.connection.Open();
+                command.Parameters.AddWithValue("@UserId", jwtUserId);
+                SqlDataAdapter dataAdapter = new(command);
+                DataTable dataTable = new();
+                dataAdapter.Fill(dataTable);
+                foreach (DataRow dataRow in dataTable.Rows)
+                {
+                    responseModel.Add(
+                         new WishListResponseModel
+                         {
+                             WishListId = Convert.ToInt32(dataRow["WishListId"]),
+                             BookId = Convert.ToInt32(dataRow["BookId"]),
+                             UserId = Convert.ToInt32(dataRow["UserId"]),
+                             BookName = dataRow["BookName"].ToString(),
+                             BookAuthor = dataRow["BookAuthor"].ToString(),
+                             OriginalPrice = Convert.ToInt32(dataRow["OriginalPrice"]),
+                             DiscountPrice = Convert.ToInt32(dataRow["DiscountPrice"]),
+                             BookImage = dataRow["BookImage"].ToString(),
+                             BookDetails = dataRow["BookDetails"].ToString(),
+                         }
+                     );
+                }
+                return responseModel;
+            }
+            catch (Exception ex)
+            {
+                throw new KeyNotFoundException("Cannot fetch details because userId is wrong");
+            }
+            finally
+            {
+                this.connection.Close();
             }
         }
     }
