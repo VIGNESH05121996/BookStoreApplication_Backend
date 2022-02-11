@@ -21,8 +21,7 @@ namespace Repository.Services
     public class BookStoreFeedBackRL : IBookStoreFeedBackRL
     {
         public static string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=BookStoreDataBase;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-
-        SqlConnection connection = new SqlConnection(connectionString);
+        private readonly SqlConnection connection = new(connectionString);
 
         /// <summary>
         /// Adds the feed back.

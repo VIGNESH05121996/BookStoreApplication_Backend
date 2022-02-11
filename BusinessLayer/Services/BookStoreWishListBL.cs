@@ -1,5 +1,5 @@
 ﻿// <copyright file="BookStoreWishListBLcs.cs" company="Book Store Application">
-//     BookStoreWishListBLcs copyright tag.
+//     BookStoreWishListBL copyright tag.
 // </copyright>
 
 namespace Business.Services
