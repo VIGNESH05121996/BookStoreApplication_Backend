@@ -246,29 +246,40 @@ namespace Repository.Services
         {
             try
             {
-                SqlCommand command = new("spDeleteCartWithCartId", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@CartId", cartId);
-                command.Parameters.AddWithValue("@UserId", jwtUserId);
+                SqlConnection sqlConnection = new(connectionString);
+                string query = "select UserId from UserTable where UserId=@UserId ";
+                SqlCommand validateCommand = new(query, sqlConnection);
+                BookValidationModel validationModel = new();
 
-                this.connection.Open();
-                int result = command.ExecuteNonQuery();
-                if (result >= 0)
+                sqlConnection.Open();
+                validateCommand.Parameters.AddWithValue("@UserId", jwtUserId);
+                SqlDataReader reader = validateCommand.ExecuteReader();
+
+                if (reader.HasRows)
                 {
-                    return true;
+                    while (reader.Read())
+                    {
+                        validationModel.UserId = Convert.ToInt32(reader["UserId"]);
+                    }
+                    SqlCommand command = new("spDeleteCartWithCartId", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@CartId", cartId);
+                    command.Parameters.AddWithValue("@UserId", jwtUserId);
+
+                    this.connection.Open();
+                    int result = command.ExecuteNonQuery();
+                    this.connection.Close();
+                    if (result >= 0)
+                    {
+                        return true;
+                    }
                 }
-                else
-                {
-                    return false;
-                }
+                sqlConnection.Close();
+                return false;
             }
             catch (Exception ex)
             {
-                throw;
-            }
-            finally
-            {
-                this.connection.Close();
+                throw new KeyNotFoundException("Cannot delete Cart from DataBase Since No User Found");
             }
         }
     }

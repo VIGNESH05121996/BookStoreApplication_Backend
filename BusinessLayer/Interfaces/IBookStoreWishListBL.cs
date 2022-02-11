@@ -22,5 +22,13 @@ namespace Business.Interfaces
         /// <param name="jwtUserId">The JWT user identifier.</param>
         /// <returns></returns>
         bool AddWishList(long bookId, long jwtUserId);
+
+        /// <summary>
+        /// Deletes the wish list with wish list identifier.
+        /// </summary>
+        /// <param name="wishListId">The wish list identifier.</param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        bool DeleteWishListWithWishListId(long wishListId, long jwtUserId);
     }
 }

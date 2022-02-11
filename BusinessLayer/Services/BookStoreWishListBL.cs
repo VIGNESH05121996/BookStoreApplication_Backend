@@ -48,5 +48,23 @@ namespace Business.Services
                 throw;
             }
         }
+
+        /// <summary>
+        /// Deletes the wish list with wish list identifier.
+        /// </summary>
+        /// <param name="wishListId">The wish list identifier.</param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public bool DeleteWishListWithWishListId(long wishListId, long jwtUserId)
+        {
+            try
+            {
+                return this.wishListRL.DeleteWishListWithWishListId(wishListId, jwtUserId);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }

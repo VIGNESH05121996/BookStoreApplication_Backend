@@ -59,5 +59,29 @@ namespace BookStoreApplication.Controllers
                 return NotFound(new { message = ex.Message });
             }
         }
+
+        /// <summary>
+        /// Deletes the wish list with wish list identifier.
+        /// </summary>
+        /// <param name="wishListId">The wish list identifier.</param>
+        /// <returns></returns>
+        [HttpDelete("{wishListId}")]
+        public IActionResult DeleteWishListWithWishListId(long wishListId)
+        {
+            try
+            {
+                long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+                bool deleteWishList = wishListBL.DeleteWishListWithWishListId(wishListId, jwtUserId);
+                if (deleteWishList)
+                {
+                    return Ok(new { Success = true, message = "WishList Deleted " });
+                }
+                return NotFound(new { Success = false, message = "Invalid WishListId" });
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
     }
 }
