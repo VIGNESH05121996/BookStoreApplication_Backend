@@ -50,6 +50,8 @@ namespace BookStoreApplication
             services.AddTransient<IBookStoreFeedBackRL, BookStoreFeedBackRL>();
             services.AddTransient<IBookStoreAddressBL, BookStoreAddressBL>();
             services.AddTransient<IBookStoreAddressRL, BookStoreAddressRL>();
+            services.AddTransient<IBookStoreOrderBL, BookStoreOrderBL>();
+            services.AddTransient<IBookStoreOrderRL, BookStoreOrderRL>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -117,7 +119,7 @@ namespace BookStoreApplication
 
             app.UseAuthorization();
 
-            app.UseMiddleware<ErrorHandlerMiddleware>();
+            //app.UseMiddleware<ErrorHandlerMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
