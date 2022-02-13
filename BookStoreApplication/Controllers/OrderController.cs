@@ -59,5 +59,29 @@ namespace BookStoreApplication.Controllers
                 return NotFound(new { message = ex.Message });
             }
         }
+
+        /// <summary>
+        /// Get All Orders controller
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult GetAllOrders()
+        {
+            try
+            {
+                long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+                IEnumerable<OrderResponse> allOrders = orderBL.GetAllOrders(jwtUserId);
+                if (allOrders == null)
+                {
+                    return NotFound(new { Success = false, message = "Invalid User Id" });
+                }
+
+                return Ok(new { Success = true, message = "Retrived All Orders ", allOrders });
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
     }
 }

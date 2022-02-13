@@ -125,5 +125,50 @@ namespace Repository.Services
                 this.connection.Close();
             }
         }
+
+        /// <summary>
+        /// Gets all orders.
+        /// </summary>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Collections.Generic.KeyNotFoundException">Cannot fetch orders</exception>
+        public IEnumerable<OrderResponse> GetAllOrders(long jwtUserId)
+        {
+            try
+            {
+                List<OrderResponse> responseModel = new();
+                SqlCommand command = new("spGetAllOrders", connection);
+                command.CommandType = CommandType.StoredProcedure;
+
+                this.connection.Open();
+                command.Parameters.AddWithValue("@UserId", jwtUserId);
+                SqlDataAdapter dataAdapter = new(command);
+                DataTable dataTable = new();
+                dataAdapter.Fill(dataTable);
+                foreach (DataRow dataRow in dataTable.Rows)
+                {
+                    responseModel.Add(
+                         new OrderResponse
+                         {
+                             OrderId = Convert.ToInt32(dataRow["OrderId"]),
+                             UserId = Convert.ToInt32(dataRow["UserId"]),
+                             AddressId = Convert.ToInt32(dataRow["AddressId"]),
+                             BookId = Convert.ToInt32(dataRow["BookId"]),
+                             Quantity = Convert.ToInt32(dataRow["Quantity"]),
+                             TotalPrice = Convert.ToInt32(dataRow["Price"])
+                         }
+                     );
+                }
+                return responseModel;
+            }
+            catch (Exception ex)
+            {
+                throw new KeyNotFoundException("Cannot fetch orders");
+            }
+            finally
+            {
+                this.connection.Close();
+            }
+        }
     }
 }

@@ -50,5 +50,22 @@ namespace Business.Services
                 throw;
             }
         }
+
+        /// <summary>
+        /// Gets all orders.
+        /// </summary>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public IEnumerable<OrderResponse> GetAllOrders(long jwtUserId)
+        {
+            try
+            {
+                return this.orderRL.GetAllOrders(jwtUserId);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }

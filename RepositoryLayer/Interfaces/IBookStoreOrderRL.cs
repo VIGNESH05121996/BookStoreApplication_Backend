@@ -24,5 +24,12 @@ namespace Repository.Interfaces
         /// <param name="jwtUserId">The JWT user identifier.</param>
         /// <returns></returns>
         OrderResponse AddOrder(long bookId, AddOrderModel model, long jwtUserId);
+
+        /// <summary>
+        /// Gets all orders.
+        /// </summary>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        IEnumerable<OrderResponse> GetAllOrders(long jwtUserId);
     }
 }
