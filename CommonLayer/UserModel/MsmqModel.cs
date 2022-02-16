@@ -59,7 +59,7 @@ namespace Common.UserModel
                 var msg = msmq.EndReceive(e.AsyncResult);
                 string token = msg.Body.ToString();
                 string Subject = "Book Store Application Password Reset";
-                string Body = token;
+                string Body = $"Book Store Reset Password: <a href=http://localhost:4200/resetPassword/{token}> Click Here</a>";
                 string receiverMail = DecodeJwt(token);
 
                 MailMessage message = new MailMessage("vickytestsmtp@gmail.com", receiverMail);

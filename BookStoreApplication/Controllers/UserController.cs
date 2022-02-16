@@ -108,7 +108,7 @@ namespace BookStoreApplication.Controllers
         }
 
         [Authorize]
-        [HttpPut("ResetPassword")]
+        [HttpPut("resetPassword")]
         public IActionResult ResetPassword(ResetPasswordModel model)
         {
             try
