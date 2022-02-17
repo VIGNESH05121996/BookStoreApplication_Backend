@@ -1,10 +1,10 @@
-Create Procedure spCreateBook(
+Create Procedure spCreateBooks(
     @BookName varchar(30),
     @BookAuthor varchar(30),
     @OriginalPrice bigint,
 	@DiscountPrice bigint,
 	@BookQuantity bigint,
-    @BookDetails varchar(100),
+    @BookDetails varchar(max),
     @UserId bigint
 )
 As 

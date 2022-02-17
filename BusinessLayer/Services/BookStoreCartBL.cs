@@ -40,11 +40,11 @@ namespace Business.Services
         /// <param name="model">The model.</param>
         /// <param name="jwtUserId">The JWT user identifier.</param>
         /// <returns></returns>
-        public AddCartResponse AddCart(long bookId, AddCartModel model, long jwtUserId)
+        public AddCartResponse AddCart(long bookId, long jwtUserId)
         {
             try
             {
-                return this.cartRL.AddCart(bookId, model, jwtUserId);
+                return this.cartRL.AddCart(bookId, jwtUserId);
             }
             catch (Exception ex)
             {

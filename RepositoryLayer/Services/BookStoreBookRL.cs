@@ -51,7 +51,7 @@ namespace Repository.Services
             {
                 using (connection)
                 {
-                    SqlCommand command = new("spCreateBook", connection);
+                    SqlCommand command = new("spCreateBooks", connection);
                     command.CommandType = CommandType.StoredProcedure;
 
                     command.Parameters.AddWithValue("@BookName", model.BookName);

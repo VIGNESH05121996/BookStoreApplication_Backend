@@ -83,7 +83,7 @@ namespace Repository.Services
         /// <param name="jwtUserId">The JWT user identifier.</param>
         /// <returns></returns>
         /// <exception cref="System.Collections.Generic.KeyNotFoundException">Cannot Add Detail To DataBase Since No User Found</exception>
-        public AddCartResponse AddCart(long bookId, AddCartModel model, long jwtUserId)
+        public AddCartResponse AddCart(long bookId, long jwtUserId)
         {
             try
             {
@@ -110,7 +110,6 @@ namespace Repository.Services
                         command.CommandType = CommandType.StoredProcedure;
 
                         command.Parameters.AddWithValue("@BookId", bookId);
-                        command.Parameters.AddWithValue("@Quantity", model.Quantity);
                         command.Parameters.AddWithValue("@UserId", jwtUserId);
                         this.connection.Open();
                         int result = command.ExecuteNonQuery();
@@ -120,7 +119,6 @@ namespace Repository.Services
                             AddCartResponse response = new()
                             {
                                 BookId = validationModel.BookId,
-                                Quantity = model.Quantity,
                                 UserId = validationModel.UserId
                             };
                             return response;
@@ -218,13 +216,13 @@ namespace Repository.Services
                          new CartResponseModel
                          {
                              CartId = Convert.ToInt32(dataRow["CartId"]),
-                             Quantity = Convert.ToInt32(dataRow["Quantity"]),
+                             Quantity = Convert.ToInt32(dataRow["Quantity"] == DBNull.Value ? default : dataRow["Quantity"]),
                              BookId = Convert.ToInt32(dataRow["BookId"]),
                              UserId = Convert.ToInt32(dataRow["UserId"]),
                              BookName = dataRow["BookName"].ToString(),
                              BookAuthor = dataRow["BookAuthor"].ToString(),
-                             OriginalPrice = Convert.ToInt32(dataRow["OriginalPrice"]),
-                             DiscountPrice = Convert.ToInt32(dataRow["DiscountPrice"]),
+                             OriginalPrice = Convert.ToInt32(dataRow["OriginalPrice"] == DBNull.Value ? default : dataRow["OriginalPrice"]),
+                             DiscountPrice = Convert.ToInt32(dataRow["DiscountPrice"] == DBNull.Value ? default : dataRow["DiscountPrice"]),
                              BookImage = dataRow["BookImage"].ToString(),
                              BookDetails = dataRow["BookDetails"].ToString(),
                          }

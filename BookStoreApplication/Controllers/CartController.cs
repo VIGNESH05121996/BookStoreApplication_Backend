@@ -44,12 +44,12 @@ namespace BookStoreApplication.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost("{bookId}")]
-        public IActionResult AddCart(long bookId,AddCartModel model)
+        public IActionResult AddCart(long bookId)
         {
             try
             {
                 long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
-                AddCartResponse cart = cartBL.AddCart(bookId, model, jwtUserId);
+                AddCartResponse cart = cartBL.AddCart(bookId, jwtUserId);
                 if (cart == null)
                 {
                     return NotFound(new { Success = false, message = "Not able to Book to cart since bookId is wrong" });
