@@ -94,11 +94,11 @@ namespace Repository.Services
         /// </summary>
         /// <param name="jwtUserId">The JWT user identifier.</param>
         /// <returns></returns>
-        public IEnumerable<AddressResponseModel> GetAllAddress(long jwtUserId)
+        public IEnumerable<GetAddressResponseModel> GetAllAddress(long jwtUserId)
         {
             try
             {
-                List<AddressResponseModel> responseModel = new();
+                List<GetAddressResponseModel> responseModel = new();
                 SqlCommand command = new("spGetAllAddress", connection);
                 command.CommandType = CommandType.StoredProcedure;
 
@@ -110,8 +110,9 @@ namespace Repository.Services
                 foreach (DataRow dataRow in dataTable.Rows)
                 {
                     responseModel.Add(
-                         new AddressResponseModel
+                         new GetAddressResponseModel
                          {
+                             AddressId = Convert.ToInt32(dataRow["AddressId"]),
                              TypeId = Convert.ToInt32(dataRow["TypeId"]),
                              FullName = dataRow["FullName"].ToString(),
                              FullAddress = dataRow["FullAddress"].ToString(),

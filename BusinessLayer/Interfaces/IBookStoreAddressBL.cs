@@ -29,7 +29,7 @@ namespace Business.Interfaces
         /// </summary>
         /// <param name="jwtUserId">The JWT user identifier.</param>
         /// <returns></returns>
-        IEnumerable<AddressResponseModel> GetAllAddress(long jwtUserId);
+        IEnumerable<GetAddressResponseModel> GetAllAddress(long jwtUserId);
 
         /// <summary>
         /// Updates the address.

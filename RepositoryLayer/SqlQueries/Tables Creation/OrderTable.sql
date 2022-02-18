@@ -8,5 +8,5 @@ Create Table OrderTable(
    Quantity bigint,
    Foreign Key (BookId) References BookTable(BookId) On Delete No Action,
    Foreign Key (UserId) References UserTable(UserId) On Delete No Action,
-   Foreign Key (AddressId) References AddressTable(AddressId) On Delete No Action
+   Foreign Key (AddressId) References AddressTable(AddressId) On Delete Cascade
 )

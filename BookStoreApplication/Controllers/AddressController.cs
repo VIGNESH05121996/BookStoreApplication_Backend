@@ -71,7 +71,7 @@ namespace BookStoreApplication.Controllers
             try
             {
                 long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
-                IEnumerable<AddressResponseModel> address = addressBL.GetAllAddress(jwtUserId);
+                IEnumerable<GetAddressResponseModel> address = addressBL.GetAllAddress(jwtUserId);
                 if (address == null)
                 {
                     return NotFound(new { Success = false, message = "Invalid userId" });
