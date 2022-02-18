@@ -147,8 +147,8 @@ namespace Repository.Services
                          new WishListResponseModel
                          {
                              WishListId = Convert.ToInt32(dataRow["WishListId"]),
-                             BookId = Convert.ToInt32(dataRow["BookId"]),
-                             UserId = Convert.ToInt32(dataRow["UserId"]),
+                             BookId = Convert.ToInt32(dataRow["BookId"] == DBNull.Value ? default : dataRow["BookId"]),
+                             UserId = Convert.ToInt32(dataRow["UserId"] == DBNull.Value ? default : dataRow["UserId"]),
                              BookName = dataRow["BookName"].ToString(),
                              BookAuthor = dataRow["BookAuthor"].ToString(),
                              OriginalPrice = Convert.ToInt32(dataRow["OriginalPrice"]),

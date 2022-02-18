@@ -6,7 +6,7 @@ Create Table OrderTable(
    AddressId bigInt,
    Price bigint,
    Quantity bigint,
-   Foreign Key (BookId) References BookTable(BookId) On Delete No Action,
-   Foreign Key (UserId) References UserTable(UserId) On Delete No Action,
-   Foreign Key (AddressId) References AddressTable(AddressId) On Delete Cascade
+   Foreign Key (BookId) References BookTable(BookId)  ON DELETE SET NULL,
+   Foreign Key (UserId) References UserTable(UserId)  ON DELETE SET NULL,
+   Foreign Key (AddressId) References AddressTable(AddressId)  ON DELETE SET NULL
 )

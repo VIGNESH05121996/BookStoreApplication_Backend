@@ -5,6 +5,6 @@ create table CartTable(
 	Quantity bigint,
 	UserId bigint,
 
-	FOREIGN KEY (BookId) REFERENCES BookTable (BookId) ON DELETE No Action,
-	FOREIGN KEY (UserId) REFERENCES UserTable (UserId) ON DELETE No Action
+	FOREIGN KEY (BookId) REFERENCES BookTable (BookId) ON DELETE Cascade,
+	FOREIGN KEY (UserId) REFERENCES UserTable (UserId) ON DELETE Cascade
 );

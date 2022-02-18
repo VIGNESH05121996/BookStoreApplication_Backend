@@ -151,9 +151,9 @@ namespace Repository.Services
                          new OrderResponse
                          {
                              OrderId = Convert.ToInt32(dataRow["OrderId"]),
-                             UserId = Convert.ToInt32(dataRow["UserId"]),
-                             AddressId = Convert.ToInt32(dataRow["AddressId"]),
-                             BookId = Convert.ToInt32(dataRow["BookId"]),
+                             UserId = Convert.ToInt32(dataRow["UserId"] == DBNull.Value ? default : dataRow["UserId"]),
+                             AddressId = Convert.ToInt32(dataRow["AddressId"] == DBNull.Value ? default : dataRow["AddressId"]),
+                             BookId = Convert.ToInt32(dataRow["BookId"] == DBNull.Value ? default : dataRow["BookId"]),
                              Quantity = Convert.ToInt32(dataRow["Quantity"]),
                              TotalPrice = Convert.ToInt32(dataRow["Price"])
                          }
