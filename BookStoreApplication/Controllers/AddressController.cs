@@ -91,7 +91,7 @@ namespace BookStoreApplication.Controllers
         /// <param name="addressId">The address identifier.</param>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        [HttpPut("{addressId}")]
+        [HttpPut("{addressId}/updateAddress")]
         public IActionResult UpdateAddress(long addressId, UpdateAddressModel model)
         {
             try
@@ -104,6 +104,32 @@ namespace BookStoreApplication.Controllers
                 }
 
                 return Ok(new { Success = true, message = "Address Updated Successfully ", address });
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Updates the type identifier.
+        /// </summary>
+        /// <param name="addressId">The address identifier.</param>
+        /// <param name="model">The model.</param>
+        /// <returns></returns>
+        [HttpPut("{addressId}/updateTypeId")]
+        public IActionResult UpdateTypeId(long addressId, TypeIdUpdateModel model)
+        {
+            try
+            {
+                long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+                UpdateResponseModel typeId = addressBL.UpdateTypeId(addressId, model, jwtUserId);
+                if (typeId == null)
+                {
+                    return NotFound(new { Success = false, message = "Invalid addressId to update" });
+                }
+
+                return Ok(new { Success = true, message = "TypeId Updated Successfully ", typeId });
             }
             catch (Exception ex)
             {
@@ -128,6 +154,30 @@ namespace BookStoreApplication.Controllers
                     return Ok(new { Success = true, message = "Address Deleted " });
                 }
                 return NotFound(new { Success = false, message = "Invalid addressId" });
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Get address with typeId
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("{typeId}")]
+        public IActionResult GetAddressWithTypeId(long typeId)
+        {
+            try
+            {
+                long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+                GetAddressResponseModel address = addressBL.GetAddressWithTypeId(typeId,jwtUserId);
+                if (address == null)
+                {
+                    return NotFound(new { Success = false, message = "Invalid userId" });
+                }
+
+                return Ok(new { Success = true, message = "Retrived All Address ", address });
             }
             catch (Exception ex)
             {

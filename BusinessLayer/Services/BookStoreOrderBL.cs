@@ -56,7 +56,7 @@ namespace Business.Services
         /// </summary>
         /// <param name="jwtUserId">The JWT user identifier.</param>
         /// <returns></returns>
-        public IEnumerable<OrderResponse> GetAllOrders(long jwtUserId)
+        public IEnumerable<GetAllOrdersResponseModel> GetAllOrders(long jwtUserId)
         {
             try
             {

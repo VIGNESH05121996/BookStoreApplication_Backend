@@ -132,11 +132,11 @@ namespace Repository.Services
         /// <param name="jwtUserId">The JWT user identifier.</param>
         /// <returns></returns>
         /// <exception cref="System.Collections.Generic.KeyNotFoundException">Cannot fetch orders</exception>
-        public IEnumerable<OrderResponse> GetAllOrders(long jwtUserId)
+        public IEnumerable<GetAllOrdersResponseModel> GetAllOrders(long jwtUserId)
         {
             try
             {
-                List<OrderResponse> responseModel = new();
+                List<GetAllOrdersResponseModel> responseModel = new();
                 SqlCommand command = new("spGetAllOrders", connection);
                 command.CommandType = CommandType.StoredProcedure;
 
@@ -148,14 +148,24 @@ namespace Repository.Services
                 foreach (DataRow dataRow in dataTable.Rows)
                 {
                     responseModel.Add(
-                         new OrderResponse
+                         new GetAllOrdersResponseModel
                          {
                              OrderId = Convert.ToInt32(dataRow["OrderId"]),
                              UserId = Convert.ToInt32(dataRow["UserId"] == DBNull.Value ? default : dataRow["UserId"]),
                              AddressId = Convert.ToInt32(dataRow["AddressId"] == DBNull.Value ? default : dataRow["AddressId"]),
                              BookId = Convert.ToInt32(dataRow["BookId"] == DBNull.Value ? default : dataRow["BookId"]),
                              Quantity = Convert.ToInt32(dataRow["Quantity"]),
-                             TotalPrice = Convert.ToInt32(dataRow["Price"])
+                             TotalPrice = Convert.ToInt32(dataRow["Price"]),
+                             BookName = Convert.ToString(dataRow["BookName"]),
+                             BookAuthor = Convert.ToString(dataRow["BookAuthor"]),
+                             DiscountPrice = Convert.ToInt32(dataRow["DiscountPrice"] == DBNull.Value ? default : dataRow["DiscountPrice"]),
+                             BookImage = Convert.ToString(dataRow["BookImage"]),
+                             BookDetails = Convert.ToString(dataRow["BookDetails"]),
+                             TypeId = Convert.ToInt32(dataRow["TypeId"]),
+                             FullName = dataRow["FullName"].ToString(),
+                             FullAddress = dataRow["FullAddress"].ToString(),
+                             City = dataRow["City"].ToString(),
+                             State = dataRow["State"].ToString()
                          }
                      );
                 }
@@ -163,7 +173,8 @@ namespace Repository.Services
             }
             catch (Exception ex)
             {
-                throw new KeyNotFoundException("Cannot fetch orders");
+                //throw new KeyNotFoundException("Cannot fetch orders");
+                throw new KeyNotFoundException(ex.Message);
             }
             finally
             {

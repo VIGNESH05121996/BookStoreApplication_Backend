@@ -48,5 +48,22 @@ namespace Repository.Interfaces
         /// <param name="jwtUserId">The JWT user identifier.</param>
         /// <returns></returns>
         bool DeleteAddressWithAddressId(long addressId, long jwtUserId);
+
+        /// <summary>
+        /// Updates the type identifier.
+        /// </summary>
+        /// <param name="addressId">The address identifier.</param>
+        /// <param name="model">The model.</param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        UpdateResponseModel UpdateTypeId(long addressId, TypeIdUpdateModel model, long jwtUserId);
+
+        /// <summary>
+        /// Gets the address with type identifier.
+        /// </summary>
+        /// <param name="typeId">The type identifier.</param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        GetAddressResponseModel GetAddressWithTypeId(long typeId, long jwtUserId);
     }
 }

@@ -30,6 +30,6 @@ namespace Repository.Interfaces
         /// </summary>
         /// <param name="jwtUserId">The JWT user identifier.</param>
         /// <returns></returns>
-        IEnumerable<OrderResponse> GetAllOrders(long jwtUserId);
+        IEnumerable<GetAllOrdersResponseModel> GetAllOrders(long jwtUserId);
     }
 }

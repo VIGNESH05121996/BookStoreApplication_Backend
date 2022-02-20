@@ -212,11 +212,63 @@ namespace Repository.Services
                         command.CommandType = CommandType.StoredProcedure;
 
                         command.Parameters.AddWithValue("@AddressId", addressId);
-                        command.Parameters.AddWithValue("@TypeId", model.TypeId);
                         command.Parameters.AddWithValue("@FullName", model.FullName);
                         command.Parameters.AddWithValue("@FullAddress", model.FullAddress);
                         command.Parameters.AddWithValue("@City", model.City);
                         command.Parameters.AddWithValue("@State", model.State);
+                        command.Parameters.AddWithValue("@UserId", validationModel.UserId);
+                        this.connection.Open();
+                        int result = command.ExecuteNonQuery();
+                        this.connection.Close();
+                        if (result >= 0)
+                        {
+                            return GetAddressWithId(addressId, jwtUserId);
+                        }
+                    }
+                }
+                sqlConnection.Close();
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new KeyNotFoundException("Cannot Update Detail To DataBase Since No User Found");
+            }
+        }
+
+        /// <summary>
+        /// Updates the type identifier.
+        /// </summary>
+        /// <param name="addressId">The address identifier.</param>
+        /// <param name="model">The model.</param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Collections.Generic.KeyNotFoundException">Cannot Update Detail To DataBase Since No User Found</exception>
+        public UpdateResponseModel UpdateTypeId(long addressId, TypeIdUpdateModel model, long jwtUserId)
+        {
+            try
+            {
+                SqlConnection sqlConnection = new(connectionString);
+                string query = "select UserId from UserTable where UserId=@UserId ";
+                SqlCommand validateCommand = new(query, sqlConnection);
+                BookValidationModel validationModel = new();
+
+                sqlConnection.Open();
+                validateCommand.Parameters.AddWithValue("@UserId", jwtUserId);
+                SqlDataReader reader = validateCommand.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        validationModel.UserId = Convert.ToInt32(reader["UserId"]);
+                    }
+                    using (connection)
+                    {
+                        SqlCommand command = new("spUpdateTypeId", connection);
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        command.Parameters.AddWithValue("@AddressId", addressId);
+                        command.Parameters.AddWithValue("@TypeId", model.TypeId);
                         command.Parameters.AddWithValue("@UserId", validationModel.UserId);
                         this.connection.Open();
                         int result = command.ExecuteNonQuery();
@@ -279,6 +331,51 @@ namespace Repository.Services
             catch (Exception ex)
             {
                 throw new KeyNotFoundException("Cannot Delete Address from DataBase Since No User Found");
+            }
+        }
+
+        /// <summary>
+        /// Get Address with typeId
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <param name="jwtUserId"></param>
+        /// <returns></returns>
+        public GetAddressResponseModel GetAddressWithTypeId(long typeId, long jwtUserId)
+        {
+            try
+            {
+                GetAddressResponseModel responseModel = new();
+                SqlCommand command = new("spGetAddressWithTypeId", connection);
+                command.CommandType = CommandType.StoredProcedure;
+
+                this.connection.Open();
+                command.Parameters.AddWithValue("@TypeId", typeId);
+                command.Parameters.AddWithValue("@UserId", jwtUserId);
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        responseModel.AddressId = Convert.ToInt32(reader["addressId"]);
+                        responseModel.TypeId = Convert.ToInt32(reader["TypeId"]);
+                        responseModel.FullName = reader["FullName"].ToString();
+                        responseModel.FullAddress = reader["FullAddress"].ToString();
+                        responseModel.City = reader["City"].ToString();
+                        responseModel.State = reader["State"].ToString();
+                        responseModel.UserId = Convert.ToInt32(reader["UserId"]);
+                    }
+                    return responseModel;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new KeyNotFoundException("Cannot fetch details because addressId is wrong");
+            }
+            finally
+            {
+                this.connection.Close();
             }
         }
     }

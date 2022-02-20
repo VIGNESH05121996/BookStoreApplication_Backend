@@ -1,6 +1,5 @@
 Create Procedure spUpdateAddress(  
     @AddressId bigint,
-	@TypeId bigint,
 	@FullName varchar(150),
 	@FullAddress varchar(max),
 	@City varchar(225),
@@ -9,6 +8,6 @@ Create Procedure spUpdateAddress(
 )
 As 
 Begin
-   UPDATE AddressTable set TypeId=@TypeId,FullName=@FullName,FullAddress=@FullAddress,
+   UPDATE AddressTable set FullName=@FullName,FullAddress=@FullAddress,
    City=@City,State=@State where AddressId=@AddressId and UserId=@UserId
 End

@@ -16,13 +16,6 @@ namespace Common.AddressModel
     public class UpdateAddressModel
     {
         /// <summary>
-        /// Gets or sets the type identifier.
-        /// </summary>
-        /// <value>
-        /// The type identifier.
-        /// </value>
-        public long TypeId { get; set; }
-        /// <summary>
         /// Gets or sets the full name.
         /// </summary>
         /// <value>

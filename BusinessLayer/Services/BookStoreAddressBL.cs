@@ -104,5 +104,42 @@ namespace Business.Services
                 throw;
             }
         }
+
+        /// <summary>
+        /// Updates the type identifier.
+        /// </summary>
+        /// <param name="addressId">The address identifier.</param>
+        /// <param name="model">The model.</param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public UpdateResponseModel UpdateTypeId(long addressId, TypeIdUpdateModel model, long jwtUserId)
+        {
+            try
+            {
+                return this.addressRL.UpdateTypeId(addressId, model, jwtUserId);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Gets the address with type identifier.
+        /// </summary>
+        /// <param name="typeId">The type identifier.</param>
+        /// <param name="jwtUserId">The JWT user identifier.</param>
+        /// <returns></returns>
+        public GetAddressResponseModel GetAddressWithTypeId(long typeId, long jwtUserId)
+        {
+            try
+            {
+                return this.addressRL.GetAddressWithTypeId(typeId, jwtUserId);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }

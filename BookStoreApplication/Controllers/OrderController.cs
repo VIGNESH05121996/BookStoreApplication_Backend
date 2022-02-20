@@ -70,7 +70,7 @@ namespace BookStoreApplication.Controllers
             try
             {
                 long jwtUserId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
-                IEnumerable<OrderResponse> allOrders = orderBL.GetAllOrders(jwtUserId);
+                IEnumerable<GetAllOrdersResponseModel> allOrders = orderBL.GetAllOrders(jwtUserId);
                 if (allOrders == null)
                 {
                     return NotFound(new { Success = false, message = "Invalid User Id" });
