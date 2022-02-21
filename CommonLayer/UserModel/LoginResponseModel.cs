@@ -1,5 +1,5 @@
-﻿// <copyright file="UserTableDetails.cs" company="Book Store Application">
-//     UserTableDetails copyright tag.
+﻿// <copyright file="LoginResponseModel.cs" company="Book Store Application">
+//     LoginResponseModel copyright tag.
 // </copyright>
 
 namespace Common.UserModel
@@ -11,16 +11,10 @@ namespace Common.UserModel
     using System.Threading.Tasks;
 
     /// <summary>
-    /// User Table Details
+    /// Login Response Model class
     /// </summary>
-    public class UserTableDetails
+    public class LoginResponseModel
     {
-        /// <summary>
-        /// Gets or sets the user identifier.
-        /// </summary>
-        /// <value>
-        /// The user identifier.
-        /// </value>
         public long UserId { get; set; }
 
         /// <summary>
@@ -40,19 +34,19 @@ namespace Common.UserModel
         public string EmailId { get; set; }
 
         /// <summary>
-        /// Gets or sets the password.
-        /// </summary>
-        /// <value>
-        /// The password.
-        /// </value>
-        public string Password { get; set; }
-
-        /// <summary>
         /// Gets or sets the mobile number.
         /// </summary>
         /// <value>
         /// The mobile number.
         /// </value>
         public string MobileNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets the JWT token.
+        /// </summary>
+        /// <value>
+        /// The JWT token.
+        /// </value>
+        public string JwtToken { get; set; }
     }
 }

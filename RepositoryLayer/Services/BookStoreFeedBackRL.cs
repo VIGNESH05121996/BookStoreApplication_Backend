@@ -132,7 +132,8 @@ namespace Repository.Services
                                  BookId = Convert.ToInt32(dataRow["BookId"]),
                                  UserId = Convert.ToInt32(dataRow["UserId"]),
                                  FeedBack = dataRow["FeedBack"].ToString(),
-                                 Ratings = Convert.ToInt32(dataRow["Ratings"])
+                                 Ratings = Convert.ToInt32(dataRow["Ratings"]),
+                                 FullName = dataRow["FullName"].ToString(),
                              }
                          );
                     }

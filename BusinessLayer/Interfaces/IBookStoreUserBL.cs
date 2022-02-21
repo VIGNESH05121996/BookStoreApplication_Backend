@@ -29,7 +29,7 @@ namespace BusinessLayer.Interfaces
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        string Login(LoginModel model);
+        LoginResponseModel Login(LoginModel model);
 
         /// <summary>
         /// Forgets the password.

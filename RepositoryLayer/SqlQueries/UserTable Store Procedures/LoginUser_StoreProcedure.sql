@@ -4,5 +4,5 @@ Create Procedure spLoginUser(
 )
 As 
 Begin
-   select UserId,EmailId,Password from UserTable where EmailId=@EmailId and Password=@Password
+   select UserId,EmailId,MobileNumber,FullName from UserTable where EmailId=@EmailId and Password=@Password
 End

@@ -53,5 +53,13 @@ namespace Common.FeedBackModel
         /// The user identifier.
         /// </value>
         public long UserId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the full name.
+        /// </summary>
+        /// <value>
+        /// The full name.
+        /// </value>
+        public string FullName { get; set; }
     }
 }

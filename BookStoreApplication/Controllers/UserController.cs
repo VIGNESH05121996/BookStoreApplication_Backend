@@ -71,12 +71,12 @@ namespace BookStoreApplication.Controllers
         {
             try
             {
-                string credentials = userBL.Login(model);
+                LoginResponseModel credentials = userBL.Login(model);
                 if (credentials == null)
                 {
                     return NotFound(new { Success = false, message = "Email or Password Not Found" });
                 }
-                return Ok(new { Success = true, message = "Login Successful", jwtToken = credentials });
+                return Ok(new { Success = true, message = "Login Successful", credentials });
             }
             catch (Exception ex)
             {

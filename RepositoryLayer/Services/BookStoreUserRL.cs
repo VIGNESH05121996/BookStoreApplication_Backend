@@ -138,13 +138,13 @@ namespace RepositoryLayer.Services
         /// <param name="model">The model.</param>
         /// <returns></returns>
         /// <exception cref="System.Collections.Generic.KeyNotFoundException"></exception>
-        public string Login(LoginModel model)
+        public LoginResponseModel Login(LoginModel model)
         {
             try
             {
                 using (connection)
                 {
-                    UserTableDetails detail = new UserTableDetails();
+                    LoginResponseModel detail = new ();
                     SqlCommand command = new SqlCommand("spLoginUser", connection);
                     command.CommandType = CommandType.StoredProcedure;
 
@@ -159,17 +159,19 @@ namespace RepositoryLayer.Services
                         {
                             detail.UserId = Convert.ToInt32(reader["UserId"] == DBNull.Value ? default : reader["UserId"]);
                             detail.EmailId = Convert.ToString(reader["EmailID"] == DBNull.Value ? default : reader["EmailID"]);
-                            detail.Password = Convert.ToString(reader["Password"] == DBNull.Value ? default : reader["Password"]);
+                            detail.MobileNumber = Convert.ToString(reader["MobileNumber"] == DBNull.Value ? default : reader["MobileNumber"]);
+                            detail.FullName = Convert.ToString(reader["FullName"] == DBNull.Value ? default : reader["FullName"]);
                         }
                         string token = JwtTokenGenerate(detail.EmailId,detail.UserId);
-                        return token;
+                        detail.JwtToken = token;
+                        return detail;
                     }
                     return null;
                 }
             }
             catch (Exception ex)
             {
-                throw new KeyNotFoundException("Cannot Validate details with database");
+                throw new KeyNotFoundException(ex.Message);
             }
             finally
             {

@@ -56,7 +56,7 @@ namespace BusinessLayer.Services
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns></returns>
-        public string Login(LoginModel model)
+        public LoginResponseModel Login(LoginModel model)
         {
             try
             {

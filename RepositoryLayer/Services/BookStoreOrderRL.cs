@@ -158,6 +158,7 @@ namespace Repository.Services
                              TotalPrice = Convert.ToInt32(dataRow["Price"]),
                              BookName = Convert.ToString(dataRow["BookName"]),
                              BookAuthor = Convert.ToString(dataRow["BookAuthor"]),
+                             OriginalPrice = Convert.ToInt32(dataRow["OriginalPrice"] == DBNull.Value ? default : dataRow["OriginalPrice"]),
                              DiscountPrice = Convert.ToInt32(dataRow["DiscountPrice"] == DBNull.Value ? default : dataRow["DiscountPrice"]),
                              BookImage = Convert.ToString(dataRow["BookImage"]),
                              BookDetails = Convert.ToString(dataRow["BookDetails"]),
