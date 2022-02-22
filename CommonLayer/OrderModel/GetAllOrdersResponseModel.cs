@@ -61,6 +61,8 @@ namespace Common.OrderModel
         /// The quantity.
         /// </value>
         public long Quantity { get; set; }
+
+        public string OrderPlacedAt { get; set; }
         /// <summary>
         /// Gets or sets the name of the book.
         /// </summary>

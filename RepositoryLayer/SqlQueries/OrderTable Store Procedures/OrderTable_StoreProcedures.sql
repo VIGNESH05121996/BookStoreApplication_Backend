@@ -17,8 +17,8 @@ Begin
 			Declare @available bigint;
 			select @unitPrice = DiscountPrice, @available = BookQuantity from [BookTable] where BookId = @BookId;
 
-			insert into OrderTable (UserId,AddressId,BookId,Price,Quantity)
-			values(@UserId, @AddressId, @BookId, (@unitPrice*@Quantity), @Quantity);
+			insert into OrderTable (UserId,AddressId,BookId,Price,Quantity,OrderPlacedAt)
+			values(@UserId, @AddressId, @BookId, (@unitPrice*@Quantity), @Quantity,CONVERT(varchar(20),getdate(),100));
 
 			Update [BookTable]
 			set

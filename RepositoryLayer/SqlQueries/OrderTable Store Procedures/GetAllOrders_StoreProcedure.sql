@@ -10,6 +10,7 @@ BEGIN
 		o.UserId,
 		o.Price,
 		o.Quantity,
+		o.OrderPlacedAt,
 		b.BookName,
 		b.BookAuthor,
 		b.OriginalPrice,

@@ -156,6 +156,7 @@ namespace Repository.Services
                              BookId = Convert.ToInt32(dataRow["BookId"] == DBNull.Value ? default : dataRow["BookId"]),
                              Quantity = Convert.ToInt32(dataRow["Quantity"]),
                              TotalPrice = Convert.ToInt32(dataRow["Price"]),
+                             OrderPlacedAt = Convert.ToString(dataRow["OrderPlacedAt"]),
                              BookName = Convert.ToString(dataRow["BookName"]),
                              BookAuthor = Convert.ToString(dataRow["BookAuthor"]),
                              OriginalPrice = Convert.ToInt32(dataRow["OriginalPrice"] == DBNull.Value ? default : dataRow["OriginalPrice"]),
